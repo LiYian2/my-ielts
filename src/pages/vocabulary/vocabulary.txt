@@ -3927,7 +3927,7 @@ smuggle|v.|走私，投运|He was caught smuggling cameras into the country
 convict|v./n.|定罪；宣判...有罪/已决犯|He was convicted of murder
 ---
 strangle|v.|扼杀，压制，勒死，扼死|The economist argues that high taxation strangles the economy
-massacre|n./v.|残杀。屠杀|The massacre of Jews by Nazi in World War II was appalling
+massacre|n./v.|残杀。屠杀|The massacre of Jews by Nazi in World War II was appalling|appalling 骇人听闻的
 decimation|n.|大批杀死，大量毁灭；大大削弱|Those policies resulted in a decimation of essential services used by the poor
 intervene|v.|插话；干扰；干涉|I shall leave on Sunday if nothing intervenes
 impede|v.|妨碍，阻止|Nothing can impede his progress
@@ -4102,65 +4102,65 @@ sideways|adv.|向（或从、往）一侧|The dog swatted the hedgehog sideways|
 身心健康
 +++
 feel|v.|感觉到，感知；触碰|Can you feel the tension in this room?|feeling n. 感情；感觉
-mood|n.|心情，情绪；气氛
-emotion|n.|情绪，情感，感情
+mood|n.|心情，情绪；气氛|I'm not in the mood to argue with you
+emotion|n.|情绪，情感，感情|She was good at hiding her emotions
 ---
-temper|n./v.|坏脾气；情绪；心情/是缓和
-manner|n.|举止；礼貌；风俗；方式
-attitude|n.|态度；看法
+temper|n./v.|坏脾气；情绪；心情/使缓和|He is in a very bad temper today
+manner|n.|举止；礼貌；风俗；方式|He is easy in conversation and graceful in manner
+attitude|n.|态度；看法|We must maintain a firm attitude
 ---
-character|n.|性格；特征；人物；角色
-personality|n.|个性；人格
-trait|n.|特点；特性
+character|n.|性格；特征；人物；角色|The new buildings have changed the character of the village
+personality|n.|个性；人格|The boy is developing a fine personality
+trait|n.|特点；特性|Thousand of years later, people are still arguing for vehemently over whether personality traits are born or learned
 ---
-virtue|n.|美德；德行；优点
-feature|n./v.|特征；面容的一部分/以...为特色
-stature|n.|身高；身材；（精神、道德等的）高度
+virtue|n.|美德；德行；优点|Patriotism, respect, and patience are always good virtues
+feature|n./v.|特征；面容的一部分/以...为特色|Her eyes were her best feature
+stature|n.|身高；身材；（精神、道德等的）高度|Bernard was short in stature with a large head
 ---
-flesh|n.|肉；人类
-mankind|n.|人类；男人
-human|adj./n.|人类的；有人性的/人类
+flesh|n.|肉；人类|The pain was almost more than flesh could take
+mankind|n.|人类；男人|Mankind learns its first language in early childhood
+human|adj./n.|人类的；有人性的/人类|The accident was caused by human error
 ---
-bone|n.|骨；骨骼
-backbone|n.|脊柱；骨干；中坚；骨气
-skeleton|n.|骨骼；骨架；框架；梗概
+bone|n.|骨；骨骼|Once cancer has spread to the bone, it's difficult to treat
+backbone|n.|脊柱；骨干；中坚；骨气|The bachelors are the backbone of this community
+skeleton|n.|骨骼；骨架；框架；梗概|A long illness made a skeleton out of him
 ---
-skull|n.|头脑；头骨
-brain|n.|脑；[~s]智力；智慧
-mind|n.|头脑；思维；思考能力；意见；记忆力
-physical|adj.|身体的；物质的；物理的
-mental|adj.|精神的；思想上的；智力的
+skull|n.|头脑；头骨|He can't seem to get it into his skull that I'm just not interested in him 他似乎无法理解我对他没有兴趣
+brain|n.|脑；[~s]智力；智慧|His brain was working overtime
+mind|n.|头脑；思维；思考能力；意见；记忆力|The mind is the kingdom of thought
+physical|adj.|身体的；物质的；物理的|Physical fitness means having a strong, healthy body
+mental|adj.|精神的；思想上的；智力的|He got the answer by mental arithmetic|mental arithmetic 心算
 ---
-cheek|n.|面颊
-forehead|n.|额
-brow|n.|额；眉毛
-eyelash|n.|眼睫毛
+cheek|n.|面颊|A bumblebee stung me on the cheek
+forehead|n.|额|The cut on his forehead scarred over|scar over 结疤
+brow|n.|额；眉毛|He furrowed his brows in thought
+eyelash|n.|眼睫毛|She batted her long, dark eyelashes at him
 ---
-lip|n.|嘴唇；（洞口、伤口等的）边缘||lipstick n. 口红；唇膏
-mouth|n.|口；嘴；河口
-tongue|n.|舌头；语言
-throat|n.|喉咙；窄路；嗓子；嗓音
-gorge|n./v.|咽喉；暴食；山峡；峡谷/狼吞虎咽
-chin|n.|下巴
+lip|n.|嘴唇；（洞口、伤口等的）边缘|They came to the lip of a dead crater 死火山口|lipstick n. 口红；唇膏
+mouth|n.|口；嘴；河口|They gave him mouth-to-mouth resuscitation and heart massage 人工呼吸和心脏按摩
+tongue|n.|舌头；语言|The tongue is one of the organs for pronouciation
+throat|n.|喉咙；窄路；嗓子；嗓音|His throat was dry and sore
+gorge|n./v.|咽喉；暴食；山峡；峡谷/狼吞虎咽|We live near the three gorges
+chin|n.|下巴|Ben caught him on the chin with a uppercut 本一记上勾拳击中了他的下巴
 ---
-jaw|n.|颌；下巴；狭窄入口；唠叨
-neck|n.|脖子；已领；海峡
-beard|n.|胡须
+jaw|n.|颌；下巴；狭窄入口；唠叨|He fingered his jaw thoughtfully
+neck|n.|脖子；衣领；海峡|The races were neck and neck at the finish|neck and neck 并驾齐驱，不分上下
+beard|n.|胡须|He has a light beard and never shaves it
 ---
-shoulder|n.|肩膀
-limb|n.|肢；树枝
-elbow|n./v.|肘部；弯头；扶手/用肘挤
-wrist|n.|腕；腕关节
+shoulder|n.|肩膀|I stand shoulder to shoulder with Julia on this important issue
+limb|n.|肢；树枝|Men and women have four limbs, two arms and two legs
+elbow|n./v.|肘部；弯头；扶手/用肘挤|He was elbowed aside on the bus
+wrist|n.|腕；腕关节|His injured wrist began to swell
 ---
-thumb|n.|拇指
-palm|n./v.|棕榈树；手掌/把...藏在手中
-finger|n.|手指
-fist|n.|拳头
+thumb|n.|拇指|She gave him a thumbs up sign
+palm|n./v.|棕榈树；手掌/把...藏在手中|He put the insect on the palm of his hand
+finger|n.|手指|My fingers prick
+fist|n.|拳头|We will extend the hand if you're willing to unclench your fist
 ---
-chest|n.|胸；胸部
-abdomen|n.|腹；腹部
-rib|n.|肋骨；排骨
-waist|n.|腰；腰部
+chest|n.|胸；胸部|The swordman wore chest protectors
+abdomen|n.|腹；腹部|I have pain in the lower abdomen
+rib|n.|肋骨；排骨|He suffered three cracked ribs in the accident
+waist|n.|腰；腰部|She took in the waist of her dress 她把裙子的腰身改小了
 ---
 organ|n.|器官；手风琴；机构
 liver|n.|肝脏
