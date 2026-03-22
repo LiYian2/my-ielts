@@ -4221,60 +4221,60 @@ cripple|n./v.|跛子；残疾人/使跛|She was crippled in a car accident
 lame|adj.|跛的；瘸的；（解释或接口）无说服力的|The lame child lagged behind
 dwarf|n./adj.|（童话中的）小矮人；侏儒/矮小的|There is a dwarf apple tree in our garden
 ---
-pregnancy|n.|怀孕；妊娠
-born|adj./v.|天生的；与生俱来的/[be ~]出生||be born of 出生于...家庭
-condom|n.|避孕套
-clone|v./n.|克隆/克隆的动植物
+pregnancy|n.|怀孕；妊娠|The pregnancy was an accident
+born|adj./v.|天生的；与生俱来的/[be ~]出生|The youngest is a born politician|be born of 出生于...家庭
+condom|n.|避孕套|When a woman finds lipstick stains on her husband's clothing or unfamiliar condoms in his pocket, it brings the worst in her
+clone|v./n.|克隆/克隆的动植物|He was opposed to using this unusual animal husbandry technique to clone humans
 ---
-symptom|n.|征兆；症状
-disease|n.|疾病
-illness|n.|疾；疾病
+symptom|n.|征兆；症状|Fever is a symptom of many illnesses
+disease|n.|疾病|The entire population of this village was wiped out by this terrible disease
+illness|n.|疾；疾病|His illness diminished his health
 ---
-moan|n./v.|呻吟；哀悼
-infection|n.|传染；传染病；影响
-detriment|n.|损害；损害物
+moan|n./v.|呻吟；哀悼|Each time she moved her head, she let out a moan
+infection|n.|传染；传染病；影响|Are you sure there is no danger of infection now?
+detriment|n.|损害；损害物|Smoking is now considered a detriment to health
 ---
-broken|adj.|弄坏的；破碎的
-disable|v.|使丧失能力，使伤残
-invalid|n./adj.|病弱者；伤残者/病弱的；伤残的
-patient|n./adj.|病人/有耐心的；能忍耐的
-dysfunction|n.|（身体）功能障碍
+broken|adj.|弄坏的；破碎的|He likes to tinker with broken gadgets
+disable|v.|使丧失能力，使伤残|He was disabled in an accident and couldn't play football anymore
+invalid|n./adj.|病弱者；伤残者/病弱的；伤残的|The old lady resented being treated as an invalid
+patient|n./adj.|病人/有耐心的；能忍耐的|He is a patient man, but not even he could sit down under that kind of provocation
+dysfunction|n.|（身体）功能障碍|The neurological dysfunction disabled him
 ---
-diabetes|n.|糖尿病
-obesity|n.|（过度）肥胖；肥胖症
-overweight|adj./n./v.|超重的；过胖的/超重/使超重；过于重视
-hypertension|n.|高血压
-paralyse/paralyze|v.|使麻痹；使瘫痪；使无助
+diabetes|n.|糖尿病|The poor old man was afflicted with diabetes
+obesity|n.|（过度）肥胖；肥胖症|Obesity is a problem for many people in contemporary society
+overweight|adj./n./v.|超重的；过胖的/超重/使超重；过于重视|Too many people in the United States are overweight
+hypertension|n.|高血压|They claim that hypertension has numerous causes
+paralyse/paralyze|v.|使麻痹；使瘫痪；使无助|The electricity failure paralyzed the train service
 ---
-dizzy|adj./v.|头晕目眩的；眩晕的/使眩晕
-insane|adj.|患精神病的；疯狂的|His must insane to drive his car so fast|an insane asylum 精神病院
-insomnia|n.|失眠；失眠症
+dizzy|adj./v.|头晕目眩的；眩晕的/使眩晕|The old woman was dizzied by the strong wind
+insane|adj.|患精神病的；疯狂的|He must insane to drive his car so fast|an insane asylum 精神病院
+insomnia|n.|失眠；失眠症|He suffered from insomnia and was taking sleeping pills each night
 ---
-allergy|n.|敏感症；过敏性
-heart attack|n.|心脏病发作
-cancer|n.|癌
-arthritis|n.|关节炎
-pimple|n.|粉刺；丘疹
+allergy|n.|敏感症；过敏性|People with allergies and other respiratory and heart ailments maybe more seriously affected
+heart attack|n.|心脏病发作|Heart attack is a sudden severe instance of abnormal heart function
+cancer|n.|癌|The patient finally died from cancer
+arthritis|n.|关节炎|The medicine can cure arthritis
+pimple|n.|粉刺；丘疹|He has a lot of pimples on his face
 ---
-stroke|n.|中风；打击；一笔（画）
+stroke|n.|中风；打击；一笔（画）|I know a doctor who is expert in curing stroke
 plague|n.|瘟疫|Plague came in the wake of earthquake
-flu/influenze|n.|流行性感冒
-fever|n./v.|狂热；发烧；发热/（使）发烧；（使）狂热
+flu/influenze|n.|流行性感冒|The bird flu can spread quickly
+fever|n./v.|狂热；发烧；发热/（使）发烧；（使）狂热|Football fever gripped the town when the local team reached the final
 ---
-headache|n.|头痛
-swell|v.|肿胀；膨胀；（使）增加
-choke|v.|（使）窒息；阻塞；说不出话
+headache|n.|头痛|The aspirins erased my headache
+swell|v.|肿胀；膨胀；（使）增加|These small items help to swell the total greatly
+choke|v.|（使）窒息；阻塞；说不出话|She found it hard to choke down her anger
 ---
-injure|v.|伤害；使遭受损伤；损害
-injury|n.|伤害；损害
-hurt|v.|损害；伤害；（使）疼痛
-bleed|v.|流血；榨取；给...放血；放掉（水或气体）
+injure|v.|伤害；使遭受损伤；损害|Don't injure yourself with that tool
+injury|n.|伤害；损害|She still suffers considerable discomfort from her injury
+hurt|v.|损害；伤害；（使）疼痛|The rumors hurt his reputation badly
+bleed|v.|流血；榨取；给...放血；放掉（水或气体）|All the soldiers are ready to bleed for their country
 ---
-bruise|n./v.|瘀伤；伤痕/擦伤
-scar|n.|疤痕；伤疤
-wound|n.|创伤；伤害；伤口
-trauma|n.|外伤；身体上的伤；精神创伤；痛苦经历
-lump|n./v.|块；肿块/使成块状
+bruise|n./v.|瘀伤；伤痕/擦伤|Who removes stones bruise their fingers
+scar|n.|疤痕；伤疤|The wound left a scar
+wound|n.|创伤；伤害；伤口|I hope her emotional wound will heal with the passing of time
+trauma|n.|外伤；身体上的伤；精神创伤；痛苦经历|That's trauma five years ago, left more than 90, 000 people dead or missing
+lump|n./v.|块；肿块/使成块状|There is a nasty lump on her neck
 ---
 pain|n./v.|痛苦；疼痛/使痛苦
 death|n.|死；死亡；毁灭
