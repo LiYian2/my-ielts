@@ -4276,67 +4276,67 @@ wound|n.|创伤；伤害；伤口|I hope her emotional wound will heal with the 
 trauma|n.|外伤；身体上的伤；精神创伤；痛苦经历|That's trauma five years ago, left more than 90, 000 people dead or missing
 lump|n./v.|块；肿块/使成块状|There is a nasty lump on her neck
 ---
-pain|n./v.|痛苦；疼痛/使痛苦
-death|n.|死；死亡；毁灭
-mortal|adj./n.|必死的；致命的/凡人；人类
-demise|n./v.|死亡；君权的转移或授予；禅让/遗赠；转让
-doom|n./v.|厄运；毁灭/使注定失败（或死亡等）
+pain|n./v.|痛苦；疼痛/使痛苦|His leg was broken and he suffered great pain
+death|n.|死；死亡；毁灭|The seedling was frozen to death
+mortal|adj./n.|必死的；致命的/凡人；人类|It is an indisputable fact that man is mortal|indisputable adj. 无可争辩的；不容置疑的
+demise|n./v.|死亡；君权的转移或授予；禅让/遗赠；转让|The land demised to a charitable institution
+doom|n./v.|厄运；毁灭/使注定失败（或死亡等）|Dissonance among three partners doomed the project
 ---
-fatal|adj.|致命的；毁灭性的；决定性的
-lethal|adj.|致命的
-corpus|n.|尸体；文集；本金
+fatal|adj.|致命的；毁灭性的；决定性的|The fatal hour has come
+lethal|adj.|致命的|This pesticide is not only lethal to pests, but also dangerous to your pets
+corpus|n.|尸体；文集；本金|He asked his children to have his corpus burnt after his death
 ---
-overwork|n./v.|过度操劳；过度工作/（使）过度工作
-tire|v.|（使）感到疲劳；厌烦
-exhaust|v.|使精疲力竭；用完；耗尽
-fatigue|n./v.|疲劳/（使）疲劳
+overwork|n./v.|过度操劳；过度工作/（使）过度工作|I was completely knackered from overwork
+tire|v.|（使）感到疲劳；厌烦|My legs began to tire after half an hour's aerobic workout
+exhaust|v.|使精疲力竭；用完；耗尽|The enemy troops were exhausted and demoralized|demoralize v. 使士气低落；使泄气
+fatigue|n./v.|疲劳/（使）疲劳|The patient fatigues easily
 ---
-faint|adj./v.|模糊的；微弱的；虚弱的/晕倒
-feeble|adj.|虚弱的；无力的；微弱的
-weary|adj.|疲倦的；厌烦的
+faint|adj./v.|模糊的；微弱的；虚弱的/晕倒|He felt faint because of starvation
+feeble|adj.|虚弱的；无力的；微弱的|Grandmother has been getting feebler lately
+weary|adj.|疲倦的；厌烦的|After many hours in the saddle, he was very weary
 ---
-weaken|v.|减弱；削弱；变软弱
-uncomfortable|adj.|不舒服的；不自在的
-unconscious|adj.|无意识的；失去知觉的
+weaken|v.|减弱；削弱；变软弱|Because transplants weaken the immune system, they can not be performed on sick patients
+uncomfortable|adj.|不舒服的；不自在的|I have an uncomfortable feeling deep in my throat
+unconscious|adj.|无意识的；失去知觉的|This wounded soldier was unconscious from his loss of blood
 ---
-chronic|adj.|慢性的；长期的
-acute|adj.|（疾病）急性的；敏锐的；深刻的
-sore|adj.|疼痛的；恼火的；严重的
+chronic|adj.|慢性的；长期的|He is good at treating chronic diseased patients
+acute|adj.|（疾病）急性的；敏锐的；深刻的|He has given an acute analysis of the situation
+sore|adj.|疼痛的；恼火的；严重的|My legs are sore from all that running yesterday
 ---
-sorrow|n.|悲伤；悲痛
-suffering|n.|苦难；折磨
-lament|n../v.|悲伤；哀悼/哀悼；对...感到悔恨
+sorrow|n.|悲伤；悲痛|He told me with sorrow that his mother was ill
+suffering|n.|苦难；折磨|Inward suffering is the worst nemesis
+lament|n../v.|悲伤；哀悼/哀悼；对...感到悔恨|He lamented his thoughtless acts
 ---
-hospital|n.|医院
-therapy|n.|治疗
-health care|n.|医疗保健
-sanitary|adj.|卫生的；清洁的
+hospital|n.|医院|When I left hospital, I was completely cured
+therapy|n.|治疗|Physical therapy will alternate with chemical therapy
+health care|n.|医疗保健|I watched a program about health care
+sanitary|adj.|卫生的；清洁的|There was a small and not very sanitary inn nearby
 ---
-medical|adj.|医学的；医疗的
-curative|adj./n.|治疗的/药品
-hygiene|n.|卫生（学）；保健（学）
-fitness|n.|健康；合适
+medical|adj.|医学的；医疗的|Before you join the company, you will have to have a medical examination
+curative|adj./n.|治疗的/药品|This herb was once thought to be curative
+hygiene|n.|卫生（学）；保健（学）|Wash yourself regularly to ensure personal hygiene
+fitness|n.|健康；合适|The long climb tested our fitness and stamina|stamina n. 耐力；持久力
 ---
-clinic|n.|诊所；门诊部
-physician|n.|内科医生
-surgeon|n.|外科医生
-operation|n.|手术；操作；经营；运转
+clinic|n.|诊所；门诊部|The psychological clinic is located near the newly built railway station
+physician|n.|内科医生|He prevails to be a surgeon rather than a physician
+surgeon|n.|外科医生|The surgeon has performed an operation
+operation|n.|手术；操作；经营；运转|The operation of this machine is simple
 ---
-cure|v./n.|治好；治愈/疗法；治疗
-heal|v.|治愈；愈合
-treatment|n.|治疗；疗法；待遇
-check|v./n.|检查；核对/[美]账单
+cure|v./n.|治好；治愈/疗法；治疗|What can't be cured must be endured
+heal|v.|治愈；愈合|The terrible wound took a long time to heal
+treatment|n.|治疗；疗法；待遇|A proper treatment will do great goods to both his body and his psychology
+check|v./n.|检查；核对/[美]账单|Do look out for spelling mistakes when you check your homework
 ---
-prescription|n.|处方；药方；秘诀
-transplant|v.|移植
-X-ray|n./v.|X射线/用 X 射线检查
-injection|n.|注射；注射物；单射（函数）
+prescription|n.|处方；药方；秘诀|What's your prescription for a happy marriage?
+transplant|v.|移植|The patient rejected the transplanted heart
+X-ray|n./v.|X射线/用 X 射线检查|She went to the hospital for an X-ray yesterday
+injection|n.|注射；注射物；单射（函数）|The doctor gave her an injection to alleviate the pain
 ---
-precaution|n.|预防；警惕；预防措施
-vaccinate|v.|给...接种疫苗；预防接种
-quarantine|v./n.|对...进行隔离检疫/检疫；隔离检查期
-segregate|v.|隔离
-isolate|v.|使隔离；使孤立；使脱离
+precaution|n.|预防；警惕；预防措施|Safety first, precaution crucial
+vaccinate|v.|给...接种疫苗；预防接种|Many people are vaccinated against smallpox as children
+quarantine|v./n.|对...进行隔离检疫/检疫；隔离检查期|The quarantine is now abolished
+segregate|v.|隔离|The doctor segregated the child sick with scarlet fever
+isolate|v.|使隔离；使孤立；使脱离|The farm is isolated and the nearest house is 30 kilometers away
 ---
 pharmacy|n.|药店；药剂学
 medicine|n.|药；医学
