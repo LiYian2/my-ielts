@@ -4338,69 +4338,69 @@ quarantine|v./n.|对...进行隔离检疫/检疫；隔离检查期|The quarantin
 segregate|v.|隔离|The doctor segregated the child sick with scarlet fever
 isolate|v.|使隔离；使孤立；使脱离|The farm is isolated and the nearest house is 30 kilometers away
 ---
-pharmacy|n.|药店；药剂学
-medicine|n.|药；医学
-remedy|n.|药物；治疗法；解决方法
+pharmacy|n.|药店；药剂学|In the west, you probably don't go to the hospital to buy drugs. You go to the pharmacy or drugstore
+medicine|n.|药；医学|I have a stomach ache. May I have some medicine?
+remedy|n.|药物；治疗法；解决方法|Your only remedy is to go to law|go to law 诉诸法律
 ---
-drug|n.|毒品；药
-pill|n.|药丸
-antibiotic|n.|抗生素
+drug|n.|毒品；药|His medicine is a drug that can be injected or taken by mouth
+pill|n.|药丸|The doctor told him to take six pills a day until he fully recovered
+antibiotic|n.|抗生素|The factory is specialized in the production of antibiotics
 ---
-acupuncture|n.|针灸
-penicillin|n.|青霉素
-morphine|n.|吗啡
-dose|n./v.|一剂/给...服药
+acupuncture|n.|针灸|Do you believe in Chinese acupuncture?
+penicillin|n.|青霉素|He gave me a second shot of penicillin
+morphine|n.|吗啡|Morphine, like cocaine, is addictive
+dose|n./v.|一剂/给...服药|Take one dose of this cough syrup three times a day
 ---
-recovery|n.|恢复；痊愈
-refresh|v.|使恢复精神
-relief|n.|宽恕；轻松；减轻；缓解
-relieve|v.|救济；减轻；解除（痛苦、不快等）
-alleviate|n.|减轻（痛苦等）；缓解
+recovery|n.|恢复；痊愈|We are suprised by the speed of her recovery
+refresh|v.|使恢复精神|A cool drink refreshed me after my long walk
+relief|n.|宽恕；轻松；减轻；缓解|I felt great relief when I heard I had passed the examination
+relieve|v.|救济；减轻；解除（痛苦、不快等）|The government acted quickly to relieve the widespread distress caused by the earthquake
+alleviate|n.|减轻（痛苦等）；缓解|The docker gave her an injection to alleviate the pain
 ---
-resume|v.|重新开始；（中断后的）继续
-ease|v./n.|减轻；返送；缓和/容易；悠闲
-relax|v.|放松
+resume|v.|重新开始；（中断后的）继续|We resumed our work after a rest
+ease|v./n.|减轻；返送；缓和/容易；悠闲|He is expected to win the game with ease
+relax|v.|放松|Relax for a while and take it easy
 ---
-normal|adj.|正常的；正规的；规范的
-common|adj.|共同的；普通的；平常的
-usual|adj.|通常的；惯常的
+normal|adj.|正常的；正规的；规范的|The normal price of a ticket is 230 dollars
+common|adj.|共同的；普通的；平常的|We have common topics to talk about
+usual|adj.|通常的；惯常的|We have mainly adopted some usual international practices
 ---
-optimistic|adj.|乐观主义的；乐观的
-pessimistic|adj.|悲观的；悲观主义的
-positive|adj.|肯定的；值得的；绝对的
-negative|adj.|怀疑的，消极的
-passive|adj.|被动的，消极的
+optimistic|adj.|乐观主义的；乐观的|We are optimistic about its future
+pessimistic|adj.|悲观的；悲观主义的|He is pessimistic about the future
+positive|adj.|肯定的；值得的；绝对的|It was a positive delight to hear her sing so beautifully
+negative|adj.|怀疑的，消极的|Petroleum extraction can have a negative impact on the environment
+passive|adj.|被动的，消极的|It lands the manager in a passive position
 ---
-enthusiastic|adj.|热心的；热情的
-indifferent|adj.|漠不关心的；无关紧要的；平庸的；中立的
-apathetic|adj.|无动于衷的；漠不关心的
-negligible|adj.|可以忽略的；微不足道的
+enthusiastic|adj.|热心的；热情的|You were so enthusiastic, so I couldn't say no to your invitation
+indifferent|adj.|漠不关心的；无关紧要的；平庸的；中立的|He is indifferent to the result of the exam
+apathetic|adj.|无动于衷的；漠不关心的|I can not understand your apathetic attitude
+negligible|adj.|可以忽略的；微不足道的|The damage to my car is negligible
 ---
-happiness|n.|幸福；快乐；适当
-delight|v./n.|（使）高兴；爱好/乐趣
-merry|adj.|愉快的；欢乐的；微醉的
+happiness|n.|幸福；快乐；适当|I desire happiness
+delight|v./n.|（使）高兴；爱好/乐趣|She delights in cooking lovely meals
+merry|adj.|愉快的；欢乐的；微醉的|There is a merry smile on her face
 ---
-fun|n./adj.|乐趣；玩笑/有趣的
-joke|n./v.|笑话；玩笑/说笑话；开玩笑
-laughter|n.|笑；笑声
-joy|n.|欢乐，喜悦；乐趣
+fun|n./adj.|乐趣；玩笑/有趣的|I'm learning to cook just for the fun of it
+joke|n./v.|笑话；玩笑/说笑话；开玩笑|He closed his speech with a funny joke
+laughter|n.|笑；笑声|We couldn't withhold our laughter
+joy|n.|欢乐，喜悦；乐趣|He is in a mesurable joy
 ---
-please|v./adv.|使高兴；取悦/请
-rejoice|v.|（使）高兴、欢喜
-thrill|n./v.|（使）激动；感到紧张
-cheer|v.|使振作；（向...）欢呼
+please|v./adv.|使高兴；取悦/请|It's difficult to please everybody
+rejoice|v.|（使）高兴、欢喜|We rejoiced at the good new
+thrill|n./v.|（使）激动；感到紧张|It's a site that never fails to thrill me
+cheer|v.|使振作；（向...）欢呼|They beat drums to cheer up the players
 ---
-pleasure|n.|愉快；高兴；荣幸
-agreeable|adj.|使人愉快的；（欣然）同意的
-exhilarate|v.|使高兴；使兴奋
+pleasure|n.|愉快；高兴；荣幸|She took no please in her work
+agreeable|adj.|使人愉快的；（欣然）同意的|My parents are quite agreeable to my decision to study abroad
+exhilarate|v.|使高兴；使兴奋|His bold designs always exhilarate the viewers
 ---
-satisfactory|adj.|令人满意的
-desirable|adj.|可取的；值得拥有的；合意的
-exciting|adj.|令人兴奋的；使人激动的
+satisfactory|adj.|令人满意的|The efficacy of the medicine is satisfactory
+desirable|adj.|可取的；值得拥有的；合意的|It is most desirable that he should attend the conference
+exciting|adj.|令人兴奋的；使人激动的|I like the exciting rhythm of African drum music
 ---
-keen|adj.|强烈的；敏锐的；渴望的；有强烈兴趣的
-zeal|n.|热心；热情；热忱
-lively|adj.|活泼的；活跃的；栩栩如生的
+keen|adj.|强烈的；敏锐的；渴望的；有强烈兴趣的|They are rather keen on your new type woolens
+zeal|n.|热心；热情；热忱|Jack served everyone with zeal
+lively|adj.|活泼的；活跃的；栩栩如生的|He is an outgoing and lively person
 ---
 lovely|adj.|可爱的；令人愉快的
 fond|adj.|喜爱的；溺爱的
