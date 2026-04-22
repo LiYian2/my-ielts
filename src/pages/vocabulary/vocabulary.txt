@@ -4402,62 +4402,62 @@ keen|adj.|强烈的；敏锐的；渴望的；有强烈兴趣的|They are rather
 zeal|n.|热心；热情；热忱|Jack served everyone with zeal
 lively|adj.|活泼的；活跃的；栩栩如生的|He is an outgoing and lively person
 ---
-lovely|adj.|可爱的；令人愉快的
-fond|adj.|喜爱的；溺爱的
-favor/favour|n.|偏爱；赞同；恩惠；帮助
+lovely|adj.|可爱的；令人愉快的|The girl's rosy cheeks made her look very lovely
+fond|adj.|喜爱的；溺爱的|A fond mother may spoil her children
+favor/favour|n.|偏爱；赞同；恩惠；帮助|Would you please do me a favor, Ben?
 ---
-surprising|adj.|令人惊讶的；出人意料的
-startle|v./n.|使大吃一惊/吃惊
-amazing|adj.|令人惊叹的；惊人的
-astound|v.|使大吃一惊；使惊骇
-hectic|adj.|兴奋活跃的；忙乱的；繁忙的
+surprising|adj.|令人惊讶的；出人意料的|It is surprising that a man like that were elected
+startle|v./n.|使大吃一惊/吃惊|He was startled by the news
+amazing|adj.|令人惊叹的；惊人的|It's amazing that human beings can always survive all kinds of difficulties
+astound|v.|使大吃一惊；使惊骇|He was astounded when he heard that his son had taken drugs
+hectic|adj.|兴奋活跃的；忙乱的；繁忙的|The journalist led a hectic life
 ---
-liberal|adj.|慷慨的；大方的；自由主义的
-generous|adj.|慷慨的；宽厚的
-gentle|adj.|温和的；文雅的；出身名门的
-humble|adj.|谦虚的；卑微的
-modest|adj.|谦虚的；谦逊的
+liberal|adj.|慷慨的；大方的；自由主义的|My father gives me a liberal amount of money every week
+generous|adj.|慷慨的；宽厚的|She was always very generous in making donations to charity
+gentle|adj.|温和的；文雅的；出身名门的|Gentle music can relax me
+humble|adj.|谦虚的；卑微的|Being humble means that you do not allow your current opinions and beliefs to get in the way of new learning
+modest|adj.|谦虚的；谦逊的|She is very modest about the prizes she has won
 ---
-humorous|adj.|幽默的；诙谐的
-polite|adj.|有礼貌的；客气的
-frank|adj.|坦白的；直率的
-mysterious|adj.|神秘的；不可思议的
-curious|adj.|好奇的；好求知的
-daring|adj.|勇敢的；大胆的
-manly|adj.|有男子气概的；果断的
-direct|adj.|直接的；直率的
+humorous|adj.|幽默的；诙谐的|I have plenty of humorous tales
+polite|adj.|有礼貌的；客气的|It is not polite of you to cut the speaker off
+frank|adj.|坦白的；直率的|A frank discussion can help clear the air
+mysterious|adj.|神秘的；不可思议的|That enchanter is very mysterious
+curious|adj.|好奇的；好求知的|It is good to be curious about the world around you
+daring|adj.|勇敢的；大胆的|He had proved himself a most daring adventurer
+manly|adj.|有男子气概的；果断的|He looks very manly in his uniform
+direct|adj.|直接的；直率的|I'm in direct contact with hijackers
 ---
-earnest|adj.|认真的；诚恳的
-honesty|n.|诚实；正直
-proud|adj.|骄傲的；自豪的；令人自豪的
-rational|adj.|理性的；合理的
-seriously|adv.|严肃得；认真地；严重地
-stern|adj.|严厉的；坚定的
+earnest|adj.|认真的；诚恳的|I'm sure he was earnest when he said he would come
+honesty|n.|诚实；正直|I respect you for your honesty
+proud|adj.|骄傲的；自豪的；令人自豪的|It was a proud day for us when we won the trophy
+rational|adj.|理性的；合理的|Man is rational being
+seriously|adv.|严肃地；认真地；严重地|The judge appeared to weigh the matter seriously
+stern|adj.|严厉的；坚定的|She had a stern father who never praised her
 ---
-friendly|adj.|友好的；友善的
-hospitable|adj.|好客的；热情友好的
-romantic|adj.|浪漫的；充满传奇色彩的
+friendly|adj.|友好的；友善的|The meeting has a very friendly atmosphere
+hospitable|adj.|好客的；热情友好的|Be hospitable. Sometimes cups of tea or even slices of toast can give you a head start in making friends
+romantic|adj.|浪漫的；充满传奇色彩的|It is said that Frenchmen are among the most romantic people in the world
 ---
-freedom|n.|自由；独立自主
-careful|adj.|仔细地；细致的；小心的；谨慎的
-concern|n./v.|关心；忧虑/涉及；使担忧；关心
-confidence|n.|自信；信任
+freedom|n.|自由；独立自主|By persistence, many countries won freedom
+careful|adj.|仔细地；细致的；小心的；谨慎的|He is careful in his speech
+concern|n./v.|关心；忧虑/涉及；使担忧；关心|As far as I'm concerned, I'm not against your plan
+confidence|n.|自信；信任|I have full confidence that you will succeed
 ---
-considerate|adj.|考虑周到的；体谅的
-thoughtful|adj.|认真思考的；考虑周到的；体贴的
-sympathetic|adj.|同情的；和谐的
-ready|adj.|准备好的；愿意的
+considerate|adj.|考虑周到的；体谅的|It was considerate of you to bring me my raincoat
+thoughtful|adj.|认真思考的；考虑周到的；体贴的|It was thoughtful of you to inform me of your arrival
+sympathetic|adj.|同情的；和谐的|The volunteers felt sympathetic to the victims
+ready|adj.|准备好的；愿意的|They got ready to launch an attack
 ---
-apologize/apologise|v.|道歉；赔罪
-apology|n.|道歉；辩解
-mercy|n.|仁慈；宽容；怜悯
-admire|v.|赞美；钦佩；仰慕
+apologize/apologise|v.|道歉；赔罪|He will apologize to her for not going to her party
+apology|n.|道歉；辩解|Please accept my apology
+mercy|n.|仁慈；宽容；怜悯|We were treated with mercy
+admire|v.|赞美；钦佩；仰慕|Everybody admires him for his fine sense of humor
 ---
-remarkable|adj.|值得注意的；非凡的；卓越的
-grateful|adj.|感激的；表示感谢的
-gratitude|n.|感谢；感激；感恩
-eager|adj.|渴望的；热切的
-sound|adj./n./v.|健全的；（睡眠）酣畅的；合理地/声音/发出声音；听起来
+remarkable|adj.|值得注意的；非凡的；卓越的|He has a remarkable memory
+grateful|adj.|感激的；表示感谢的|She was grateful beyond words
+gratitude|n.|感谢；感激；感恩|I am full of gratitude to you for helping me
+eager|adj.|渴望的；热切的|He is eager to take you to meet his friends
+sound|adj./n./v.|健全的；（睡眠）酣畅的；合理地/声音/发出声音；听起来|The book is full of sound advice
 ---
 picturesque|adj.|如画的；独特的
 promising|adj.|大有希望的；有前途的
