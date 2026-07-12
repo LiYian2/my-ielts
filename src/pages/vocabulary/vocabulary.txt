@@ -4459,62 +4459,62 @@ gratitude|n.|感谢；感激；感恩|I am full of gratitude to you for helping 
 eager|adj.|渴望的；热切的|He is eager to take you to meet his friends
 sound|adj./n./v.|健全的；（睡眠）酣畅的；合理地/声音/发出声音；听起来|The book is full of sound advice
 ---
-picturesque|adj.|如画的；独特的
-promising|adj.|大有希望的；有前途的
-prominent|adj.|突出的；显著的；重要的；杰出的
-awesome|adj.|卓越的；引起敬畏的
+picturesque|adj.|如画的；独特的|I was attracted by the picturesque scene on the West Lake
+promising|adj.|大有希望的；有前途的|The whether looks promising
+prominent|adj.|突出的；显著的；重要的；杰出的|A single tree in a field is prominent
+awesome|adj.|卓越的；引起敬畏的|My truth, and your surest help in time of need, is as awesome as the night sky and as simply incontrovertibly trustful as a baby's gurgle
 ---
-arduous|adj.|辛勤的；费力的；陡峭的
-tough|adj.|艰难的；坚强的；强硬的
-robust|adj.|强壮的；强健的
-sturdy|adj.|强健的；坚定的
-steadfast|adj.|坚定的
+arduous|adj.|辛勤的；费力的；陡峭的|In those days, long distance travel was slow and arduous
+tough|adj.|艰难的；坚强的；强硬的|You need to be tough to survive in a society full of competition
+robust|adj.|强壮的；强健的|His robust strength was a counterpoise to the disease
+sturdy|adj.|强健的；坚定的|The child had sturdy legs
+steadfast|adj.|坚定的|He was a steadfast bachelor and intended to remain so
 ---
-tender|adj./v.|脆弱的；温柔的；软弱的；疼痛的/（正式）提出；投标
-temperate|adj.|（气候）温和的；温带的；有节制的；心平气和的
+tender|adj./v.|脆弱的；温柔的；软弱的；疼痛的/（正式）提出；投标|My finger is tender because I cut it on a piece of glass yesterday
+temperate|adj.|（气候）温和的；温带的；有节制的；心平气和的|A temperate diet ought to be encouraged, especially among those with obesity
 delicate|adj.|精致的；微妙的；脆弱的|Delicate plants must be protected from cold wind and frost
-mundane|adj.|平凡的；世俗的；世界的
+mundane|adj.|平凡的；世俗的；世界的|Even the most mundane things can become objects of beauty in a Frenchman's eyes
 ---
-naive|adj.|天真的；幼稚的
-childish|adj.|孩子般的；幼稚的
-sincere|adj.|真诚的；诚挚的
-liable|adj.|有责任的；有...倾向的，可能的
-trustworthy|adj.|值得信赖的，可靠的
+naive|adj.|天真的；幼稚的|He makes fun of her naive attitude
+childish|adj.|孩子般的；幼稚的|The little girl spoke in a high, childish voice
+sincere|adj.|真诚的；诚挚的|Please accept my sincere congratulations
+liable|adj.|有责任的；有...倾向的，可能的|He is liable to come today
+trustworthy|adj.|值得信赖的，可靠的|The firm is one of our trustworthy concerns
 ---
-enterprising|adj.|有事业心的；有进取心的；有魄力的
-sane|adj.|心智健全的；理智的
-strenuous|adj.|发奋的；繁重的；艰苦的
+enterprising|adj.|有事业心的；有进取心的；有魄力的|Some enterprising students are designing management software for the university
+sane|adj.|心智健全的；理智的|He is a very sane person
+strenuous|adj.|发奋的；繁重的；艰苦的|Sherry's been making a strenuous effort to lose weight
 ---
-rigorous|adj.|严格的；严厉的；一丝不苟的
-strict|adj.|严格的；严厉的
-severe|adj.|严厉的；十分严重的；艰巨的
+rigorous|adj.|严格的；严厉的；一丝不苟的|We should obey the rigorous discipline
+strict|adj.|严格的；严厉的|Our teacher is strict. We have to do what she says
+severe|adj.|严厉的；十分严重的；艰巨的|That severe teacher has gone abroad, so you can breathe freely again
 ---
-mutual|adj.|相互的；彼此的；共同的
-resemble|v.|与...相像；类似
-similar|adj.|相似的；类似的
-familiar|adj.|熟悉的
+mutual|adj.|相互的；彼此的；共同的|You need mutual understanding to set up your cooperation
+resemble|v.|与...相像；类似|She resembles her sister in appearance, but not in character
+similar|adj.|相似的；类似的|I know how you feel, because I've had a similar experience myself
+familiar|adj.|熟悉的|This song sounds familiar
 ---
-naked|adj.|裸体的；赤条条的
-bare|adj.|赤裸的，无遮蔽的
-private|adj.|私人的；个人的；私下的
+naked|adj.|裸体的；赤条条的|He rushed out naked
+bare|adj.|赤裸的，无遮蔽的|Don't walk on that broken glass with bare feet
+private|adj.|私人的；个人的；私下的|We each have our private views about it
 ---
-intuition|n.|直觉
-spontaneous|adj.|自发的；自然的；本能的；自然产生的
-implicit|adj.|暗示的；含蓄的；不怀疑的；无保留的
+intuition|n.|直觉|My intuition turned out to be correct
+spontaneous|adj.|自发的；自然的；本能的；自然产生的|It is a spontaneous cheer from the crowd
+implicit|adj.|暗示的；含蓄的；不怀疑的；无保留的|She has implicit trust in her secretary
 ---
-illusion|n.|错觉；幻想
-imaginary|adj.|想像的；虚构的
-fancy|n./v.|想象（力）；爱好/认为；想象||fantasy n. 幻想
-fate|n.|命运；宿命
-fortune|n.|命运；运气；财产
+illusion|n.|错觉；幻想|Some hairstyles can give an illusion of extra thickness
+imaginary|adj.|想像的；虚构的|An imaginary confrontation was played out in my mind
+fancy|n./v.|想象（力）；爱好/认为；想象|I fancy that it's going to rain|fantasy n. 幻想
+fate|n.|命运；宿命|She wondered what fate had in store for her next
+fortune|n.|命运；运气；财产|Everyone is the architect of his own fortune
 ---
-agony|n.|极度的痛苦；挣扎
-grief|n.|极度悲伤
-grieve|v.|（使）悲痛
+agony|n.|极度的痛苦；挣扎|It was great agony to watch him passing away
+grief|n.|极度悲伤|She did not show her grief when her son died
+grieve|v.|（使）悲痛|It grieves me to see him in such bad health
 ---
-miserable|adj.|极不愉快的；痛苦的
-distress|n./v.|悲痛；穷困；不幸/使伤心；使忧虑
-sadness|n.|悲痛；悲哀
+miserable|adj.|极不愉快的；痛苦的|The child is cold, hungry, and tired, so of course he's feeling miserable
+distress|n./v.|悲痛；穷困；不幸/使伤心；使忧虑|I pray that you will have pity on my distress
+sadness|n.|悲痛；悲哀|There was a tinge of sadness in the man's voice
 ---
 gloomy|adj.|幽暗的；令人沮丧的
 disappoint|v.|使失望；使受挫折
