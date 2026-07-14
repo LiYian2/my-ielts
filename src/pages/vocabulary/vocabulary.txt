@@ -4516,63 +4516,63 @@ miserable|adj.|极不愉快的；痛苦的|The child is cold, hungry, and tired,
 distress|n./v.|悲痛；穷困；不幸/使伤心；使忧虑|I pray that you will have pity on my distress
 sadness|n.|悲痛；悲哀|There was a tinge of sadness in the man's voice
 ---
-gloomy|adj.|幽暗的；令人沮丧的
-disappoint|v.|使失望；使受挫折
-discourage|v.|使灰心；使气馁；劝阻
+gloomy|adj.|幽暗的；令人沮丧的|Being alone in that gloomy house made me nervous
+disappoint|v.|使失望；使受挫折|The result disappointed him
+discourage|v.|使灰心；使气馁；劝阻|The woman tried to discourage her husband from driving too fast
 ---
-wretched|adj.|不幸的；可怜的；悲惨的；恶劣的
-frustrating|adj.|令人灰心的；是人沮丧的
-mourn|v.|（因失去...而）哀痛；哀悼
+wretched|adj.|不幸的；可怜的；悲惨的；恶劣的|I was shocked to see their wretched living conditions
+frustrating|adj.|令人灰心的；是人沮丧的|After two hours of frustrating delay, the train at last arrived
+mourn|v.|（因失去...而）哀痛；哀悼|We mourn for our fallen soldiers
 ---
-anger|n./v.|怒；怒气/使发怒
-furious|adj.|狂怒的；暴怒的
-frown|n./v.|皱眉；不悦/皱眉；表示不悦
+anger|n./v.|怒；怒气/使发怒|His face was inflamed with anger
+furious|adj.|狂怒的；暴怒的|The furious workers instigated the strike|instigate v. 煽动；教唆
+frown|n./v.|皱眉；不悦/皱眉；表示不悦|We interpret frown as a sign of disapproval
 ---
 rage|n.|盛怒；狂怒|My father was in a rage last night|be all the rage 非常流行；风靡一时。in a rage 怒气冲冲。road rage 路怒
-irritate|v.|激怒；使急躁；刺激
-hate|v.|恨；憎恨；不喜欢
+irritate|v.|激怒；使急躁；刺激|The noise of the children was irritating me
+hate|v.|恨；憎恨；不喜欢|They hate each other
 hatred|n.|憎恶；憎恨；仇恨|His words stirred up my hatred. 他的话激起了我的仇恨
 ---
-nuisance|n.|讨厌或麻烦的人或物||Commit No Nuisance 禁止随地小便
-disgust|v./n.|使厌恶；使作呕/厌恶
+nuisance|n.|讨厌或麻烦的人或物|Don't make yourself a nuisance to others|Commit No Nuisance 禁止随地小便
+disgust|v./n.|使厌恶；使作呕/厌恶|The smell filled me with disgust
 vex|v.|使烦恼；使恼火|She was vexed at her failure. 她因失败而恼火
-harass|v.|烦扰
+harass|v.|烦扰|A gang of delinquents harassed the storekeeper from time to time|delinquent n. 违法者；失职者；不良青少年
 ---
-bore|v./n.|烦扰；钻孔/讨厌的人；令人生厌的事
-bother|v./n.|花费时间精力（做某事）；（使）苦恼/麻烦，困难
-troublesome|adj.|令人烦恼的；麻烦的
+bore|v./n.|烦扰；钻孔/讨厌的人；令人生厌的事|Don't bore me with these boring jokes
+bother|v./n.|花费时间精力（做某事）；（使）苦恼/麻烦，困难|We had a lot of bother finding a way to his house
+troublesome|adj.|令人烦恼的；麻烦的|You must learn to rid yourself of such troublesome thoughts
 ---
-awful|adj.|令人不愉快的；极讨厌的
-unpleasant|adj.|令人不愉快的；讨厌的
-adverse|adj.|敌对的；不友好的；不利的
+awful|adj.|令人不愉快的；极讨厌的|It would be awful if you found out the truth
+unpleasant|adj.|令人不愉快的；讨厌的|It happened with unpleasant consequences
+adverse|adj.|敌对的；不友好的；不利的|This policy was having an adverse effect on our new project
 ---
-hostile|adj.|怀有敌意的；不友善的；敌对的
-indignant|adj.|愤慨的
-radical|adj.|激进的；根本的
-mad|adj.|发疯的；恼火的
-crazy|adj.|疯狂的；荒唐的
+hostile|adj.|怀有敌意的；不友善的；敌对的|Ever since I got better marks than Parker, he has been hostile to me
+indignant|adj.|愤慨的|He is indignant at the false accusation
+radical|adj.|激进的；根本的|His opinions are very radical
+mad|adj.|发疯的；恼火的|She was almost mad with grief when her son died
+crazy|adj.|疯狂的；荒唐的|Are you crazy?
 ---
-wicked|adj.|邪恶的；缺德的
-vicious|adj.|邪恶的；不道德的
-vulgar|adj.|粗俗的；庸俗的
-mean|adj./v.|卑鄙的；吝啬的/意思是
+wicked|adj.|邪恶的；缺德的|It is wicked of you to torment the poor dog
+vicious|adj.|邪恶的；不道德的|She was shocked by the vicious criticism
+vulgar|adj.|粗俗的；庸俗的|Vulgar fashions filled the store windowns
+mean|adj./v.|卑鄙的；吝啬的/意思是|The guy is mean, I mean, really mean. You should stay away from him
 ---
-ego|n.|自我；自尊；自负
-selfish|adj.|自私的；利己主义的
-nasty|adj.|下流的；肮脏的；险恶的
-rash|adj.|草率的；鲁莽的
+ego|n.|自我；自尊；自负|That promotion really boosted her ego
+selfish|adj.|自私的；利己主义的|He is probably the most selfish man in town
+nasty|adj.|下流的；肮脏的；险恶的|He is a nasty guy
+rash|adj.|草率的；鲁莽的|May I remind you it was your own rash actions that got us into this predicament|predicament n. 困境；窘境
 ---
-volatile|adj.|容变的；反复无常的；易挥发的
-weird|adj.|怪诞的；古怪的
-excessive|adj.|过分的；过多的
+volatile|adj.|容变的；反复无常的；易挥发的|People are afraid to change jobs in today's volatile economy
+weird|adj.|怪诞的；古怪的|Her weird dress attracted attention in the small town
+excessive|adj.|过分的；过多的|Excessive patriotism can lead to xenophobia
 ---
-anxiety|n.|焦虑；担心；渴望
-restless|adj.|不安定的；焦躁不安的；不耐烦的
-uneasy|adj.|心神不安的；忧虑的
+anxiety|n.|焦虑；担心；渴望|It proved difficult to disguise his anxiety
+restless|adj.|不安定的；焦躁不安的；不耐烦的|The audience was becoming restless
+uneasy|adj.|心神不安的；忧虑的|Due to your injury, I feel uneasy
 ---
-fear|n./v.|害怕；担心
-timid|adj.|胆小的；羞怯的
-fuss|n.|大惊小怪；无所谓的纷扰
+fear|n./v.|害怕；担心|The thought of returning filled him with fear
+timid|adj.|胆小的；羞怯的|You are every inch as timid as a mouse. Just speak up
+fuss|n.|大惊小怪；无所谓的纷扰|They're sure to be a fuss when they find the windows broken
 ---
 insult|v./n.|侮辱；凌辱/侮辱，凌辱
 unkind|adj.|不和善的；不仁慈的；刻薄的
