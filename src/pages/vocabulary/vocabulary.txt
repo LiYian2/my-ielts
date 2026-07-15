@@ -4574,59 +4574,59 @@ fear|n./v.|害怕；担心|The thought of returning filled him with fear
 timid|adj.|胆小的；羞怯的|You are every inch as timid as a mouse. Just speak up
 fuss|n.|大惊小怪；无所谓的纷扰|They're sure to be a fuss when they find the windows broken
 ---
-insult|v./n.|侮辱；凌辱/侮辱，凌辱
-unkind|adj.|不和善的；不仁慈的；刻薄的
-envy|n./v.|羡慕；嫉妒
-jealous|adj.|嫉妒的；妒忌的
+insult|v./n.|侮辱；凌辱/侮辱，凌辱|He insulted her by calling her an idiot
+unkind|adj.|不和善的；不仁慈的；刻薄的|Don't be so unkind to your brother
+envy|n./v.|羡慕；嫉妒|The boy's new electronic toy train was the envy of his friends
+jealous|adj.|嫉妒的；妒忌的|Gilt is always jealous
 ---
-doubt|n./v.|怀疑，疑问/怀疑；不信
-suspicion|n.|怀疑，嫌疑
-skeptical/sceptical|adj.|怀疑的
+doubt|n./v.|怀疑，疑问/怀疑；不信|There is no doubt about it
+suspicion|n.|怀疑，嫌疑|He is under suspicion of murder
+skeptical/sceptical|adj.|怀疑的|He has a skeptical attitude towards all religions
 ---
-unsatisfactory|adj.|不能令人满意的；不符合要求的；不足的
-unstable|adj.|不稳定的；易变的；不牢固的
-unsuitable|adj.|不合适的；不适宜的
+unsatisfactory|adj.|不能令人满意的；不符合要求的；不足的|They demand a refund on unsatisfactory goods
+unstable|adj.|不稳定的；易变的；不牢固的|This book case is too unstable to hold so many books
+unsuitable|adj.|不合适的；不适宜的|The dress is unsuitable for summer
 ---
-unwilling|adj.|不愿意的；不情愿的；勉强的
-reluctant|adj.|不情愿的；勉强的
-hesitate|v.|犹豫不决；顾虑
-confuse|v.|使困惑；把（某人）弄糊涂；混淆
+unwilling|adj.|不愿意的；不情愿的；勉强的|He is unwilling to give up the opportunity
+reluctant|adj.|不情愿的；勉强的|She was reluctant to leave the neighbourhood of Paris
+hesitate|v.|犹豫不决；顾虑|Please don't hesitate to do it
+confuse|v.|使困惑；把（某人）弄糊涂；混淆|Don't confuse Austria with Australia
 ---
-guilty|adj.|有罪的；内疚的
-embarrass|v.|使尴尬，使窘迫，使局促不安
-regret|n./v.|遗憾；抱歉；悲叹/后悔；痛惜；惋惜
-repent|v.|忏悔；后悔
-ashamed|adj.|惭愧的；感到难为情的
+guilty|adj.|有罪的；内疚的|Whenever I think of how hard my parents are saving for my education and how little I've learned, I feel guilty
+embarrass|v.|使尴尬，使窘迫，使局促不安|I was embarrassed by their compliments
+regret|n./v.|遗憾；抱歉；悲叹/后悔；痛惜；惋惜|You will regret it when you're older
+repent|v.|忏悔；后悔|He repented of his action
+ashamed|adj.|惭愧的；感到难为情的|You should be ashamed of yourself
 ---
-sigh|n./v.|叹息；叹气
-weep|v./n.|哭泣；流泪；哀悼/哭泣
-tolerance|n.|忍受；容忍；宽容
-ignorant|adj.|无知的；没有学识的；愚昧的
-endure|v.|忍耐；忍受；持久
+sigh|n./v.|叹息；叹气|She let out a long sigh of despair
+weep|v./n.|哭泣；流泪；哀悼/哭泣|Laugh and a world laughs with you; weep and you weep alone
+tolerance|n.|忍受；容忍；宽容|We should always try to show tolerance to other people
+ignorant|adj.|无知的；没有学识的；愚昧的|Wise men become wiser as they grow older, ignorant men more ignorant
+endure|v.|忍耐；忍受；持久|I can't endure her endless complaints a moment longer
 ---
-sly|adj.|狡猾的；狡诈的
-cunning|adj.|狡猾的；巧妙的
-arbitrary|adj.|武断的；专断的；任意的
+sly|adj.|狡猾的；狡诈的|She had a sly personality
+cunning|adj.|狡猾的；巧妙的|You're cunning and I can't work you out
+arbitrary|adj.|武断的；专断的；任意的|My choice was quite arbitrary
 ---
-ridiculous|adj.|荒谬的；可笑的
-stupid|adj.|愚蠢的；麻木的；乏味的/傻瓜；笨蛋
-awkward|adj.|笨拙的；尴尬的；棘手的；不合适的
+ridiculous|adj.|荒谬的；可笑的|Who made this ridiculous rule?
+stupid|adj.|愚蠢的；麻木的；乏味的/傻瓜；笨蛋|The man in the post office was too stupid for words
+awkward|adj.|笨拙的；尴尬的；棘手的；不合适的|The child is still awkward with his chopsticks
 ---
-clumsy|adj.|笨拙的
-careless|adj.|粗心的；无忧无虑的；淡漠的
-oblivious|adj.|不知道的；未注意的
+clumsy|adj.|笨拙的|You are so clumsy. You've knocked over my cup of coffee
+careless|adj.|粗心的；无忧无虑的；淡漠的|This man was severely put down for his careless work
+oblivious|adj.|不知道的；未注意的|She is oblivious to our warnings
 ---
-naughty|adj.|淘气的；顽皮的
-greedy|adj.|贪吃的；贪婪的
-obtrusive|adj.|过分炫耀的；过分突出的；眨眼的
+naughty|adj.|淘气的；顽皮的|Those naughty boys have been acting up again|act up 调皮捣蛋
+greedy|adj.|贪吃的；贪婪的|The greedy man is alway needy
+obtrusive|adj.|过分炫耀的；过分突出的；眨眼的|Try to wear something less obtrusive
 ---
-slothful|adj.|偷懒的；懒散的
-sluggish|adj.|行动迟缓的
-impulse|n.|冲动；心血来潮
+slothful|adj.|偷懒的；懒散的|Fatigue had made him slothful
+sluggish|adj.|行动迟缓的|If you don't eat breakfast, you'll feel tired and sluggish
+impulse|n.|冲动；心血来潮|He bought the house on an impulse
 ---
-rigid|adj.|固执的；严格的；刚硬的
-stubborn|adj.|顽固的；固执的
-stereotype|n.|老一套；模式化观念；刻板印象
+rigid|adj.|固执的；严格的；刚硬的|The old man is very rigid in his ideas
+stubborn|adj.|顽固的；固执的|She won't do what I ask. She is very stubborn
+stereotype|n.|老一套；模式化观念；刻板印象|This idea is an old-fashioned stereotype
 ===
 时间日期
 +++
