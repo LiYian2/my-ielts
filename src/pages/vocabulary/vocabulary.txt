@@ -4111,7 +4111,7 @@ attitude|n.|态度；看法|We must maintain a firm attitude
 ---
 character|n.|性格；特征；人物；角色|The new buildings have changed the character of the village
 personality|n.|个性；人格|The boy is developing a fine personality
-trait|n.|特点；特性|Thousand of years later, people are still arguing for vehemently over whether personality traits are born or learned
+trait|n.|特点；特性|Thousands of years later, people are still arguing for vehemently against each other over whether personality traits are born or learned
 ---
 virtue|n.|美德；德行；优点|Patriotism, respect, and patience are always good virtues
 feature|n./v.|特征；面容的一部分/以...为特色|Her eyes were her best feature
@@ -4154,10 +4154,10 @@ wrist|n.|腕；腕关节|His injured wrist began to swell
 ---
 thumb|n.|拇指|She gave him a thumbs up sign
 palm|n./v.|棕榈树；手掌/把...藏在手中|He put the insect on the palm of his hand
-finger|n.|手指|My fingers prick
-fist|n.|拳头|We will extend the hand if you're willing to unclench your fist
+finger|n.|手指|My fingers prick 刺痛
+fist|n.|拳头|We will extend the hand if you're willing to unclench your fist|unclench v. 松开；撬开
 ---
-chest|n.|胸；胸部|The swordman wore chest protectors
+chest|n.|胸；胸部|The swordsman wore chest protectors
 abdomen|n.|腹；腹部|I have pain in the lower abdomen
 rib|n.|肋骨；排骨|He suffered three cracked ribs in the accident
 waist|n.|腰；腰部|She took in the waist of her dress 她把裙子的腰身改小了
@@ -4169,7 +4169,7 @@ womb|n.|子宫；发源地|The competition basically starts when the kids are in
 kidney|n.|肾脏|Each peason has a pair of kidneys
 ---
 lung|n.|肺|A lot of patients are suffering the pain of lung cancer 
-gland|n.|腺|His internal secretary gland can not work
+gland|n.|腺|His internal secretary gland can not work 内分泌腺
 chamber|n.|室；腔；议院|The heart has four chambers
 intestine|n.|肠|Each day 7 to 10 liters of water enter the small intestine
 ---
@@ -4250,7 +4250,7 @@ dizzy|adj./v.|头晕目眩的；眩晕的/使眩晕|The old woman was dizzied by
 insane|adj.|患精神病的；疯狂的|He must insane to drive his car so fast|an insane asylum 精神病院
 insomnia|n.|失眠；失眠症|He suffered from insomnia and was taking sleeping pills each night
 ---
-allergy|n.|敏感症；过敏性|People with allergies and other respiratory and heart ailments maybe more seriously affected
+allergy|n.|敏感症；过敏性|People with allergies and other respiratory and heart ailments may be more seriously affected
 heart attack|n.|心脏病发作|Heart attack is a sudden severe instance of abnormal heart function
 cancer|n.|癌|The patient finally died from cancer
 arthritis|n.|关节炎|The medicine can cure arthritis
@@ -4435,7 +4435,7 @@ seriously|adv.|严肃地；认真地；严重地|The judge appeared to weigh the
 stern|adj.|严厉的；坚定的|She had a stern father who never praised her
 ---
 friendly|adj.|友好的；友善的|The meeting has a very friendly atmosphere
-hospitable|adj.|好客的；热情友好的|Be hospitable. Sometimes cups of tea or even slices of toast can give you a head start in making friends
+hospitable|adj.|好客的；热情友好的|Be hospitable. Sometimes cups of tea or even slices of toast can give you a head start in making friends|head start 先发优势
 romantic|adj.|浪漫的；充满传奇色彩的|It is said that Frenchmen are among the most romantic people in the world
 ---
 freedom|n.|自由；独立自主|By persistence, many countries won freedom
@@ -4521,7 +4521,7 @@ disappoint|v.|使失望；使受挫折|The result disappointed him
 discourage|v.|使灰心；使气馁；劝阻|The woman tried to discourage her husband from driving too fast
 ---
 wretched|adj.|不幸的；可怜的；悲惨的；恶劣的|I was shocked to see their wretched living conditions
-frustrating|adj.|令人灰心的；是人沮丧的|After two hours of frustrating delay, the train at last arrived
+frustrating|adj.|令人灰心的；使人沮丧的|After two hours of frustrating delay, the train at last arrived
 mourn|v.|（因失去...而）哀痛；哀悼|We mourn for our fallen soldiers
 ---
 anger|n./v.|怒；怒气/使发怒|His face was inflamed with anger
@@ -4577,7 +4577,7 @@ fuss|n.|大惊小怪；无所谓的纷扰|They're sure to be a fuss when they fi
 insult|v./n.|侮辱；凌辱/侮辱，凌辱|He insulted her by calling her an idiot
 unkind|adj.|不和善的；不仁慈的；刻薄的|Don't be so unkind to your brother
 envy|n./v.|羡慕；嫉妒|The boy's new electronic toy train was the envy of his friends
-jealous|adj.|嫉妒的；妒忌的|Gilt is always jealous
+jealous|adj.|嫉妒的；妒忌的|Guild is always jealous
 ---
 doubt|n./v.|怀疑，疑问/怀疑；不信|There is no doubt about it
 suspicion|n.|怀疑，嫌疑|He is under suspicion of murder
@@ -4618,7 +4618,7 @@ oblivious|adj.|不知道的；未注意的|She is oblivious to our warnings
 ---
 naughty|adj.|淘气的；顽皮的|Those naughty boys have been acting up again|act up 调皮捣蛋
 greedy|adj.|贪吃的；贪婪的|The greedy man is alway needy
-obtrusive|adj.|过分炫耀的；过分突出的；眨眼的|Try to wear something less obtrusive
+obtrusive|adj.|过分炫耀的；过分突出的；扎眼的|Try to wear something less obtrusive
 ---
 slothful|adj.|偷懒的；懒散的|Fatigue had made him slothful
 sluggish|adj.|行动迟缓的|If you don't eat breakfast, you'll feel tired and sluggish
