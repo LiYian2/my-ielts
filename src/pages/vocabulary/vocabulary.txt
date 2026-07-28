@@ -4630,68 +4630,68 @@ stereotype|n.|老一套；模式化观念；刻板印象|This idea is an old-fas
 ===
 时间日期
 +++
-daily|adj./n.|每日的/日报
-monthly|adj./adv./n.|每月的/每月一次/月刊
-quarterly|adj./adv./n.|季度的/按季度地/季刊
+daily|adj./n.|每日的/日报|The best treatment for pain is daily exercise
+monthly|adj./adv./n.|每月的/每月一次/月刊|The common monthly publications can be found in the library
+quarterly|adj./adv./n.|季度的/按季度地/季刊|This journal is bi-monthly, and that one quarterly
 ---
-annual|adj./n.|每年的；一年的/年报
-yearly|adj./adv.|每年的；一年的/每年地
-anniversary|n.|周年纪念日
+annual|adj./n.|每年的；一年的/年报|The firm has an annual turnover of 800 million pounds
+yearly|adj./adv.|每年的；一年的/每年地|The yearly conference will be held next month
+anniversary|n.|周年纪念日|Jack and Kim celebrated their 20th wedding anniversary in January
 ---
-era|n.|时代；年代；纪元
-present|adj./n.|现在的/目前；礼物；赠送物
+era|n.|时代；年代；纪元|We are living in the information era
+present|adj./n.|现在的/目前；礼物；赠送物|There is no certain cure for this illness at present
 contemporary|adj.|当代的；同时代的|These clothes are more contemporary and wearable
 ---
-medieval|adj.|中世纪的；守旧的
-century|n.|世纪；百年
-millennium|n.|一千年；千年期；千禧年
+medieval|adj.|中世纪的；守旧的|Parents with a medieval attitude toward dating are not popular with the young
+century|n.|世纪；百年|It was considered one of the best films of the 20th century
+millennium|n.|一千年；千年期；千禧年|What did you do to celebrate the new millennium?
 ---
-million|num.|百万；大量
-billion|num.|十亿；大量
-dozen|n.|一打；十二个；十来个
+million|num.|百万；大量|It was estimated that the damage was over 1 million dollars
+billion|num.|十亿；大量|THe human brain contains billions of nerve cells
+dozen|n.|一打；十二个；十来个|The turkey is large enough to feed a dozen
 ---
-dawn|n./v.|黎明；开端/破晓
-midday|n.|正午；中午
-midnight|n.|午夜；子夜；半夜
-overnight|adv.|在晚上；突然；一夜之间
-night|n.|夜；夜间；晚上；夜场
+dawn|n./v.|黎明；开端/破晓|We set sail at dawn and headed for New York
+midday|n.|正午；中午|We finished work at midday
+midnight|n.|午夜；子夜；半夜|According to astronomers, the best time for viewing is between midnight and dawn
+overnight|adv.|在晚上；突然；一夜之间|I stayed overnight at a friend's home
+night|n.|夜；夜间；晚上；夜场|The city's nightclubs are open all night for eating, drinking, and dancing
 ---
-modern|adj.|现代的；近代的
-recent|adj.|最近的
-up-to-date|adj.|直到目前的；现代的
+modern|adj.|现代的；近代的|The girl can't adjust herself to the world of modern life in this big city
+recent|adj.|最近的|The vase looks old, but was a recent fake
+up-to-date|adj.|直到目前的；现代的|Up-to-date information about the research on climate change can be found on this website
 ---
-first|ord./adv.|第一/最初
-secondly|adv.|第二；其次
-finally|adv.|最后；终于；决定性地
-finish|v./n.|完成；结束/结尾；最后部分
+first|ord./adv.|第一/最初|What is your first impression of Beijing?
+secondly|adv.|第二；其次|To start with, we don't enough money. Secondly, we're too busy
+finally|adv.|最后；终于；决定性地|Today I finally get to look at the man that I love, and finally say, will you please marry me?
+finish|v./n.|完成；结束/结尾；最后部分|When would you finish your college course?
 ---
-immediately|adv.|立即；直接地
-instant|n./adj.|瞬间；立即的
-moment|n.|片刻；时刻
-minute|n./adj.|分；分钟；一会儿/细微的
+immediately|adv.|立即；直接地|I will then immediately send confirmation and the application process begins
+instant|n./adj.|瞬间；立即的|Just for an instant, I thought you was going to refuse
+moment|n.|片刻；时刻|Love is a moment that lasts forever
+minute|n./adj.|分；分钟；一会儿/细微的|It's only several minutes from here to the supermarket
 ---
-prior|adj.|在先的；在前的
-former|adj./pron.|以前的；前者的/前者
-preceding|adj.|在前的；在先的
+prior|adj.|在先的；在前的|I have a prior appointment, so I can't go with you
+former|adj./pron.|以前的；前者的/前者|Many of his former supporters voted against him
+preceding|adj.|在前的；在先的|She had been in Mexico the preceding summer
 ---
 precedent|n.|先例；常规|They were determined to break with precedent|unprecedented adj. 史无前例的；绝无仅有的
-foremost|adj.|最前的；最重要的
-opening|adj./n.|开始的/开始；开端
-initially|adv.|最初
+foremost|adj.|最前的；最重要的|He is one of the foremost scientists in China
+opening|adj./n.|开始的/开始；开端|The book's opening is dull, but the last chapter is interesting
+initially|adv.|最初|Initially, I disagreed with their proposal, but later I changed my mind
 ---
-intermediate|adj.|中间的
-midst|n.|中部；中间
-meantime|n.|[in the ~]其间；同时/[for the ~]眼下；暂时
+intermediate|adj.|中间的|This country is still at an intermediate stage of development
+midst|n.|中部；中间|We are lucky to have such a man in our midst
+meantime|n.|[in the ~]其间；同时/[for the ~]眼下；暂时|I like skiing, in the meantime, I know it is very dangerous
 ---
-meanwhile|adv.|同时；其间
-simultaneous|adj.|同时发生（或进行）的
-ongoing|adj.|进行中的；继续存在的
+meanwhile|adv.|同时；其间|The media, meanwhile, has blown hot and cold on the affair
+simultaneous|adj.|同时发生（或进行）的|The event was almost simultaneous with that one
+ongoing|adj.|进行中的；继续存在的|The discussions are still ongoing
 ---
 everlasting|adj.|永恒的|The man told the women that he loved her with an everlasting love
-permanent|adj.|永久的
-punctual|adj.|准时的；守时的
-duration|n.|持续时间；期间
-consecutive|adj.|连续不断的
+permanent|adj.|永久的|We have no permanent friends or enemies, only interests
+punctual|adj.|准时的；守时的|He is always reliable and punctual
+duration|n.|持续时间；期间|Difficulties will be experienced throughout the duration of the war
+consecutive|adj.|连续不断的|He has been absent from school for four consecutive days
 ---
 periodically|adv.|周期性地；定期地|Sea mammals must emerge periodically to breath
 imminent|adj.|（尤指不愉快的事）即将发生的；逼近的|They are unaware of the imminent danger.
