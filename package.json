@@ -11,7 +11,7 @@
     "typecheck": "vue-tsc --noEmit",
     "preview": "vite preview",
     "test": "vitest",
-    "validate:content": "vitest run test/vocabulary-learning/validate.test.ts",
+    "validate:content": "vitest run test/vocabulary-learning/content.test.ts",
     "up": "taze major -I"
   },
   "dependencies": {
