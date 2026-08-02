@@ -204,6 +204,12 @@ function copyAllError() {
             雅思词汇真经
           </h3>
           <span class="text-base font-normal text-gray-500 dark:text-gray-400">涵盖雅思必备核心词，逻辑词群记忆法</span>
+          <router-link
+            to="/vocabulary/learn"
+            class="mt-3 inline-flex rounded-lg bg-blue-700 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+          >
+            主动学习
+          </router-link>
         </div>
         <div class="items-center sm:flex">
           <div class="flex items-center">
