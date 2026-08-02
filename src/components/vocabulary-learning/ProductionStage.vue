@@ -4,6 +4,8 @@ import type { EntryId, ProductionTask, SavedAnswer } from '../../features/vocabu
 interface TaskDraft {
   text: string
   selfAssessment: Record<string, boolean>
+  baseline: Pick<SavedAnswer, 'text' | 'selfAssessment'> | null
+  isDirty: boolean
 }
 
 const props = withDefaults(defineProps<{
@@ -39,6 +41,8 @@ function draftFor(task: ProductionTask): TaskDraft {
   const created: TaskDraft = {
     text: saved?.text ?? '',
     selfAssessment: { ...(saved?.selfAssessment ?? {}) },
+    baseline: saved ? baselineFor(saved) : null,
+    isDirty: false,
   }
   drafts[task.id] = created
   return drafts[task.id]
@@ -46,6 +50,26 @@ function draftFor(task: ProductionTask): TaskDraft {
 
 function requiredWord(entryId: EntryId): string {
   return props.requiredWords[entryId] ?? entryId
+}
+
+function baselineFor(answer: SavedAnswer): Pick<SavedAnswer, 'text' | 'selfAssessment'> {
+  return { text: answer.text, selfAssessment: { ...answer.selfAssessment } }
+}
+
+function hydrateDraft(draft: TaskDraft, answer: SavedAnswer): void {
+  draft.text = answer.text
+  draft.selfAssessment = { ...answer.selfAssessment }
+  draft.baseline = baselineFor(answer)
+  draft.isDirty = false
+}
+
+function updateText(event: Event): void {
+  const draft = currentDraft.value
+  if (!draft)
+    return
+
+  draft.text = (event.target as HTMLTextAreaElement).value
+  draft.isDirty = true
 }
 
 function saveAnswer(): void {
@@ -61,6 +85,7 @@ function saveAnswer(): void {
     updatedAt: props.now().toISOString(),
   }
   savedAnswers.value = { ...savedAnswers.value, [task.id]: answer }
+  hydrateDraft(draft, answer)
   // eslint-disable-next-line vue/custom-event-name-casing -- Public parent contract uses kebab-case.
   emit('answer-saved', answer)
   maybeRecordProduction(task, answer)
@@ -73,6 +98,7 @@ function updateAssessment(dimension: string, event: Event): void {
     return
 
   draft.selfAssessment[dimension] = (event.target as HTMLInputElement).checked
+  draft.isDirty = true
   const saved = savedAnswers.value[task.id]
   if (!saved)
     return
@@ -83,6 +109,7 @@ function updateAssessment(dimension: string, event: Event): void {
     updatedAt: props.now().toISOString(),
   }
   savedAnswers.value = { ...savedAnswers.value, [task.id]: answer }
+  hydrateDraft(draft, answer)
   // eslint-disable-next-line vue/custom-event-name-casing -- Public parent contract uses kebab-case.
   emit('answer-saved', answer)
   maybeRecordProduction(task, answer)
@@ -119,8 +146,9 @@ watch(() => props.answers, (answers) => {
   savedAnswers.value = { ...savedAnswers.value, ...answers }
   for (const task of props.tasks) {
     const saved = answers[task.id]
-    if (saved && !drafts[task.id])
-      drafts[task.id] = { text: saved.text, selfAssessment: { ...saved.selfAssessment } }
+    const draft = drafts[task.id]
+    if (saved && draft && !draft.isDirty)
+      hydrateDraft(draft, saved)
   }
 }, { deep: true })
 
@@ -151,7 +179,7 @@ watch(() => props.tasks, (tasks) => {
 
       <label class="block text-sm font-medium text-gray-800 dark:text-gray-100">
         {{ currentTask.mode === 'speaking' ? '口语笔记与回答' : '回答' }}
-        <textarea v-model="currentDraft.text" rows="6" class="mt-2 w-full border border-gray-300 rounded px-3 py-2 dark:border-gray-600 dark:bg-gray-900" :aria-label="currentTask.mode === 'speaking' ? '口语笔记与回答' : '回答'" />
+        <textarea :value="currentDraft.text" rows="6" class="mt-2 w-full border border-gray-300 rounded px-3 py-2 dark:border-gray-600 dark:bg-gray-900" :aria-label="currentTask.mode === 'speaking' ? '口语笔记与回答' : '回答'" @input="updateText" />
       </label>
 
       <button data-action="save-answer" type="button" class="rounded bg-blue-700 px-4 py-2 text-sm text-white disabled:cursor-not-allowed disabled:opacity-60" :disabled="!currentDraft.text.trim()" @click="saveAnswer">

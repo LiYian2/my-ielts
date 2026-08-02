@@ -7,7 +7,10 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
+    LessonReader: typeof import('./src/components/vocabulary-learning/LessonReader.vue')['default']
+    ProductionStage: typeof import('./src/components/vocabulary-learning/ProductionStage.vue')['default']
     ProgressBackup: typeof import('./src/components/vocabulary-learning/ProgressBackup.vue')['default']
+    RecallStage: typeof import('./src/components/vocabulary-learning/RecallStage.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     TheCounter: typeof import('./src/components/TheCounter.vue')['default']
@@ -15,5 +18,6 @@ declare module 'vue' {
     TheHeader: typeof import('./src/components/TheHeader.vue')['default']
     TheInput: typeof import('./src/components/TheInput.vue')['default']
     TopicDashboard: typeof import('./src/components/vocabulary-learning/TopicDashboard.vue')['default']
+    WordCardPanel: typeof import('./src/components/vocabulary-learning/WordCardPanel.vue')['default']
   }
 }

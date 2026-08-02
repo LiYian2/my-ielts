@@ -90,4 +90,22 @@ describe('progressive recall stage', () => {
       [{ entryId: stationId, outcome: 'unaided' }],
     ])
   })
+
+  it('accepts Unicode-whitespace multiword variants and emits once when Enter and repeated completion controls race', async () => {
+    const wrapper = mountRecall()
+
+    await wrapper.get('input').setValue('galaxy')
+    await wrapper.get('input').trigger('keyup.enter')
+    await wrapper.get('[data-action="submit-answer"]').trigger('click')
+    await wrapper.get('[data-action="reveal-answer"]').trigger('click')
+    expect(wrapper.emitted('reviewed')).toEqual([[{ entryId: galaxyId, outcome: 'unaided' }]])
+
+    await wrapper.get('[data-action="next"]').trigger('click')
+    await wrapper.get('input').setValue('\u2003SPACE\u202FSTATION\u00A0')
+    await wrapper.get('[data-action="submit-answer"]').trigger('click')
+    expect(wrapper.emitted('reviewed')).toEqual([
+      [{ entryId: galaxyId, outcome: 'unaided' }],
+      [{ entryId: stationId, outcome: 'unaided' }],
+    ])
+  })
 })
