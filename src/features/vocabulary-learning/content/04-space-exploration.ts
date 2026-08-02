@@ -1,3 +1,4 @@
+import { getCanonicalTopic } from '../canonical'
 import type { EntryId, Lesson, PassageParagraph, TopicContent, WordCard } from '../types'
 
 interface CardSpec {
@@ -33,10 +34,26 @@ interface LessonBlueprint {
   tasks: TaskSpec[]
 }
 
-const topicPrefix = '04-space-exploration:'
+const canonicalTopic = getCanonicalTopic('04_太空探索')
+const canonicalEntriesByHeadword = new Map(canonicalTopic.entries.map(entry => [entry.primaryHeadword, entry]))
+const canonicalEntryIds = new Set(canonicalTopic.entries.map(entry => entry.id))
 
-function id(word: string): EntryId {
-  return `${topicPrefix}${word}` as EntryId
+function resolveEntryId(word: string): EntryId {
+  const entry = canonicalEntriesByHeadword.get(word)
+  if (!entry)
+    throw new Error(`Unknown canonical Space Exploration headword "${word}"`)
+
+  return entry.id
+}
+
+export function resolveRequiredEntryIds(words: readonly string[], taskId: string): EntryId[] {
+  return words.map((word) => {
+    const entry = canonicalEntriesByHeadword.get(word)
+    if (!entry)
+      throw new Error(`Unknown required word "${word}" in ${taskId}`)
+
+    return entry.id
+  })
 }
 
 function annotatedSentence(spec: SentenceSpec, prefix = '') {
@@ -50,7 +67,7 @@ function annotatedSentence(spec: SentenceSpec, prefix = '') {
   const after = spec.sentence.slice(targetIndex + target.length)
   return [
     { text: `${prefix}${before}` },
-    { text: matched, entryId: id(spec.word) },
+    { text: matched, entryId: resolveEntryId(spec.word) },
     { text: after },
   ]
 }
@@ -282,14 +299,14 @@ function createLesson(blueprint: LessonBlueprint): Lesson {
     id: blueprint.id,
     title: blueprint.title,
     warmupPrompt: blueprint.warmup,
-    targetEntryIds: targetWords.map(id),
+    targetEntryIds: targetWords.map(resolveEntryId),
     passage: paragraphs(blueprint.groups),
     translation: blueprint.translation,
     recallExercises: sentenceSpecs.slice(0, 4).map((sentence) => {
       const wordIndex = sentence.sentence.toLowerCase().indexOf(sentence.word.toLowerCase())
       return {
         id: `${blueprint.id}-recall-${sentence.word}`,
-        entryId: id(sentence.word),
+        entryId: resolveEntryId(sentence.word),
         before: sentence.sentence.slice(0, wordIndex),
         after: sentence.sentence.slice(wordIndex + sentence.word.length),
         acceptedAnswers: [sentence.word],
@@ -300,30 +317,46 @@ function createLesson(blueprint: LessonBlueprint): Lesson {
       id: task.id,
       mode: task.mode,
       prompt: task.prompt,
-      requiredEntryIds: task.required.filter(word => cards.some(card => card.word === word)).map(id),
+      requiredEntryIds: resolveRequiredEntryIds(task.required, task.id),
       referenceAnswer: task.reference,
       rubric: ['meaning', 'collocation', 'grammar', 'register', 'relevance'],
     })),
   }
 }
 
-const wordCards = Object.fromEntries(cards.map((card): [EntryId, WordCard] => {
-  const passageSentence = sentenceByWord.get(card.word)
-  if (!passageSentence)
-    throw new Error(`No passage sentence for ${card.word}`)
+function createWordCards(): Record<EntryId, WordCard> {
+  const cardsById = new Map<EntryId, WordCard>()
 
-  return [id(card.word), {
-    entryId: id(card.word),
-    priority: card.priority ?? 'standard',
-    ipa: card.ipa,
-    meaning: card.meaning,
-    collocations: card.collocations,
-    example: { text: card.example, use: card.use },
-    passageSentence,
-    outputPrompt: card.prompt,
-    usageNotes: card.word === 'synthesise' ? ['Use the British spelling synthesise in prose; synthesize is the American variant.'] : undefined,
-  }]
-})) as Record<EntryId, WordCard>
+  cards.forEach((card) => {
+    const entryId = resolveEntryId(card.word)
+    if (cardsById.has(entryId))
+      throw new Error(`Duplicate word card for ${entryId}`)
+
+    const passageSentence = sentenceByWord.get(card.word)
+    if (!passageSentence)
+      throw new Error(`No passage sentence for ${card.word}`)
+
+    cardsById.set(entryId, {
+      entryId,
+      priority: card.priority ?? 'standard',
+      ipa: card.ipa,
+      meaning: card.meaning,
+      collocations: card.collocations,
+      example: { text: card.example, use: card.use },
+      passageSentence,
+      outputPrompt: card.prompt,
+      usageNotes: card.word === 'synthesise' ? ['Use the British spelling synthesise in prose; synthesize is the American variant.'] : undefined,
+    })
+  })
+
+  const missingEntryIds = [...canonicalEntryIds].filter(entryId => !cardsById.has(entryId))
+  if (missingEntryIds.length)
+    throw new Error(`Missing word cards for ${missingEntryIds.join(', ')}`)
+
+  return Object.fromEntries(cardsById)
+}
+
+const wordCards = createWordCards()
 
 const spaceExplorationContent = {
   schemaVersion: 1,
@@ -337,7 +370,7 @@ const spaceExplorationContent = {
     id: 'space-exploration-speaking',
     mode: 'speaking',
     prompt: 'IELTS Speaking Part 3: Should governments continue to invest in space exploration when there are urgent problems on Earth? Speak for about two minutes. Take a clear position, give a concrete example, and acknowledge one limitation.',
-    requiredEntryIds: [id('spacecraft'), id('astronomy'), id('method')],
+    requiredEntryIds: resolveRequiredEntryIds(['spacecraft', 'astronomy', 'method'], 'space-exploration-speaking'),
     referenceAnswer: 'Governments should continue to fund space exploration, provided that projects have clear goals and public accountability. A spacecraft can improve astronomy by gathering evidence that terrestrial instruments cannot obtain. However, each method should be judged against alternatives, especially when public funds are limited.',
     rubric: ['meaning', 'collocation', 'grammar', 'register', 'relevance'],
   },
@@ -345,7 +378,7 @@ const spaceExplorationContent = {
     id: 'space-exploration-writing',
     mode: 'writing',
     prompt: 'IELTS Task 2 paragraph: Some people believe that funding space programmes is a waste of money, while others argue that it brings essential benefits. Write one balanced body paragraph (90–120 words). Use a concession and then develop your main point with a precise example.',
-    requiredEntryIds: [id('exploration'), id('synthesise'), id('signal'), id('terrestrial')],
+    requiredEntryIds: resolveRequiredEntryIds(['exploration', 'synthesise', 'signal', 'terrestrial'], 'space-exploration-writing'),
     referenceAnswer: 'Although governments must fund urgent services on Earth, space exploration can produce evidence with clear terrestrial value. For example, scientists synthesise satellite data to monitor environmental change, while satellite signals support navigation and communications. These benefits do not mean that every mission deserves automatic funding: programmes should have transparent goals, realistic budgets, and independent evaluation. Nevertheless, treating all launches as a luxury ignores the methods, measurements, and skilled employment that missions create. Governments should therefore maintain carefully targeted investment in exploration, while ensuring that it complements rather than competes with essential public services.',
     rubric: ['meaning', 'collocation', 'grammar', 'register', 'relevance'],
   },

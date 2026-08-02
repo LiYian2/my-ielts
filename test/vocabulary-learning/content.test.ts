@@ -2,7 +2,7 @@ import { existsSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { describe, expect, it } from 'vitest'
 import { getCanonicalTopic } from '../../src/features/vocabulary-learning/canonical'
-import spaceExplorationContent from '../../src/features/vocabulary-learning/content/04-space-exploration'
+import spaceExplorationContent, { resolveRequiredEntryIds } from '../../src/features/vocabulary-learning/content/04-space-exploration'
 import { assertValidTopicContent } from '../../src/features/vocabulary-learning/validate'
 import type { EntryId } from '../../src/features/vocabulary-learning/types'
 
@@ -67,5 +67,9 @@ describe('Space Exploration learning content', () => {
     const entry = canonicalTopic.entries.find(candidate => candidate.primaryHeadword === 'synthesise')
     expect(entry?.id).toBe('04-space-exploration:synthesise')
     expect(spaceExplorationContent.wordCards['04-space-exploration:synthesise'].usageNotes?.[0]).toContain('British spelling synthesise')
+  })
+
+  it('rejects an unknown authored task headword instead of silently dropping it', () => {
+    expect(() => resolveRequiredEntryIds(['galaxy', 'not-a-space-word'], 'regression-task')).toThrow('Unknown required word "not-a-space-word" in regression-task')
   })
 })
