@@ -102,3 +102,17 @@ export interface WordProgress {
   productionDates: string[]
   lastOutcome: ReviewOutcome | null
 }
+
+export interface SavedAnswer {
+  taskId: string
+  text: string
+  selfAssessment: Record<string, boolean>
+  updatedAt: string
+}
+
+export interface LearningStateV1 {
+  schemaVersion: 1
+  words: Record<EntryId, WordProgress>
+  answers: Record<string, SavedAnswer>
+  completedLessons: string[]
+}
