@@ -304,11 +304,6 @@ function copyAllError() {
                           <span class="text-lg">{{ category }}</span>
                           （ {{ refVocabulary[category].groupCount }} 组 {{ refVocabulary[category].wordCount }} 个词 ）
                         </div>
-                        <div class="justify-items-end">
-                          <audio controls class="chapter">
-                            <source :src="`vocabulary/audio/${refVocabulary[category].audio}`" type="audio/mpeg">
-                          </audio>
-                        </div>
                       </div>
                     </td>
                   </tr>
