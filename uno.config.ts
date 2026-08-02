@@ -42,7 +42,7 @@ export default defineConfig({
       },
     }),
     presetWebFonts({
-      provider: 'bunny',
+      provider: 'none',
       fonts: {
         sans: 'DM Sans',
         serif: 'DM Serif Display',

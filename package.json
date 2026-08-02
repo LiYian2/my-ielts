@@ -1,8 +1,10 @@
 {
   "private": true,
-  "packageManager": "pnpm@8.6.0",
+  "packageManager": "pnpm@8.6.10",
   "scripts": {
     "build": "vite build",
+    "check": "pnpm lint && pnpm typecheck && pnpm test -- --run && pnpm build",
+    "deploy:pages": "wrangler pages deploy dist --project-name my-ielts --branch master",
     "dev": "vite --port 3333 --open",
     "lint": "eslint .",
     "typecheck": "vue-tsc --noEmit",
@@ -39,12 +41,22 @@
     "vite": "^4.3.9",
     "vite-plugin-pages": "^0.31.0",
     "vitest": "^0.31.4",
-    "vue-tsc": "^1.6.5"
+    "vue-tsc": "^1.6.5",
+    "wrangler": "4.118.0"
   },
   "eslintConfig": {
+    "root": true,
+    "ignorePatterns": [
+      ".github/**",
+      "docs/**",
+      "src/pages/reading/reading538words.js",
+      "src/pages/vocabulary/index.vue",
+      "src/pages/vocabulary/vocabulary.js",
+      "src/pages/writing/index.vue"
+    ],
     "extends": [
-      "@antfu",
-      "@unocss"
+      "@antfu/eslint-config",
+      "@unocss/eslint-config"
     ]
   }
 }
