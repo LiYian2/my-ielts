@@ -42,7 +42,7 @@ export function loadLearningStateWithRecovery(storage: Storage, now = new Date()
   }
   catch {
     const pendingRecovery = { raw, now: new Date(now.valueOf()) }
-    return recoverInvalidState(storage, pendingRecovery)
+    return recoverInvalidState(storage, pendingRecovery) === 'recovered'
       ? { state: createLearningState() }
       : { state: createLearningState(), pendingRecovery }
   }
@@ -52,7 +52,7 @@ export function retryPendingLearningStateRecovery(storage: Storage, pendingRecov
   try {
     if (storage.getItem(LEARNING_STORAGE_KEY) !== pendingRecovery.raw)
       return 'conflict'
-    return recoverInvalidState(storage, pendingRecovery) ? 'recovered' : 'failed'
+    return recoverInvalidState(storage, pendingRecovery)
   }
   catch {
     return 'failed'
@@ -237,7 +237,7 @@ function addCalendarDays(dateKey: string, days: number): string {
   return [date.getFullYear(), String(date.getMonth() + 1).padStart(2, '0'), String(date.getDate()).padStart(2, '0')].join('-')
 }
 
-function recoverInvalidState(storage: Storage, pendingRecovery: PendingLearningStateRecovery): boolean {
+function recoverInvalidState(storage: Storage, pendingRecovery: PendingLearningStateRecovery): 'conflict' | 'failed' | 'recovered' {
   try {
     const baseKey = `${RECOVERY_STORAGE_KEY_PREFIX}${pendingRecovery.now.toISOString()}`
     let recoveryKey = baseKey
@@ -247,11 +247,13 @@ function recoverInvalidState(storage: Storage, pendingRecovery: PendingLearningS
       suffix += 1
     }
     storage.setItem(recoveryKey, pendingRecovery.raw)
+    if (storage.getItem(LEARNING_STORAGE_KEY) !== pendingRecovery.raw)
+      return 'conflict'
     storage.removeItem(LEARNING_STORAGE_KEY)
-    return true
+    return 'recovered'
   }
   catch {
     // The active value remains untouched unless its recovery copy was written first.
-    return false
+    return 'failed'
   }
 }

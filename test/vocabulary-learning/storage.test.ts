@@ -16,6 +16,7 @@ class MemoryStorage implements Storage {
   failGet = false
   failSet = false
   failRemove = false
+  onSet?: (key: string, value: string, storage: MemoryStorage) => void
 
   get length(): number {
     return this.values.size
@@ -47,6 +48,7 @@ class MemoryStorage implements Storage {
     if (this.failSet)
       throw new Error('set failed')
     this.values.set(key, value)
+    this.onSet?.(key, value, this)
   }
 }
 
@@ -390,6 +392,36 @@ describe('useLearningProgress', () => {
     progress.recordWordReview('04-space-exploration:orbit', 'unaided')
     expect(storage.getItem(LEARNING_STORAGE_KEY)).toBe('externally changed')
     expect(storage.operations).toEqual([])
+    expect(progress.persistenceError.value).toBeTruthy()
+  })
+
+  it('keeps a newer active value when recovery backup triggers a re-entrant storage update', () => {
+    const storage = new MemoryStorage()
+    const raw = '{corrupt raw JSON'
+    const newer = '{newer active value'
+    const now = new Date('2026-08-03T12:34:56.789Z')
+    const recoveryKey = `${RECOVERY_STORAGE_KEY_PREFIX}${now.toISOString()}`
+    storage.setItem(LEARNING_STORAGE_KEY, raw)
+    storage.failSet = true
+    const progress = useLearningProgress({ storage, now: () => now })
+    storage.failSet = false
+    storage.operations = []
+    storage.onSet = (key, _value, currentStorage) => {
+      if (key === recoveryKey) {
+        currentStorage.onSet = undefined
+        currentStorage.setItem(LEARNING_STORAGE_KEY, newer)
+      }
+    }
+
+    progress.recordWordExposure('04-space-exploration:orbit')
+
+    expect(storage.getItem(recoveryKey)).toBe(raw)
+    expect(storage.getItem(LEARNING_STORAGE_KEY)).toBe(newer)
+    expect(storage.operations).toEqual([
+      { type: 'set', key: recoveryKey, value: raw },
+      { type: 'set', key: LEARNING_STORAGE_KEY, value: newer },
+    ])
+    expect(progress.state.value.words['04-space-exploration:orbit'].state).toBe('understood')
     expect(progress.persistenceError.value).toBeTruthy()
   })
 
