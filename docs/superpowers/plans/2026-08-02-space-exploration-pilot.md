@@ -684,7 +684,7 @@ git commit -m "feat(vocabulary): compose active topic learning flow"
 
 **Interfaces:**
 - Consumes: all pilot features and the Cloudflare deployment completed by the first plan.
-- Produces: a verified production pilot at `https://my-ielts.pages.dev/#/vocabulary/learn`.
+- Produces: a verified production pilot at `https://liyian2-my-ielts.pages.dev/#/vocabulary/learn`.
 
 - [ ] **Step 1: Run the complete automated suite**
 
@@ -750,9 +750,9 @@ Expected: Cloudflare deployment succeeds.
 
 Open:
 
-- `https://my-ielts.pages.dev/#/vocabulary`
-- `https://my-ielts.pages.dev/#/vocabulary/learn`
-- `https://my-ielts.pages.dev/#/vocabulary/learn/space-exploration`
+- `https://liyian2-my-ielts.pages.dev/#/vocabulary`
+- `https://liyian2-my-ielts.pages.dev/#/vocabulary/learn`
+- `https://liyian2-my-ielts.pages.dev/#/vocabulary/learn/space-exploration`
 
 Complete one recall item, reload, and confirm progress persists. Play `galaxy` and `synthesise`, export progress, and verify the downloaded JSON has `schemaVersion: 1` without private credentials.
 
