@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 concurrency:
-  group: cloudflare-pages-${{ github.event_name == 'pull_request' && github.ref || 'production' }}
+  group: cloudflare-pages-${{ github.event_name != 'pull_request' && github.ref == 'refs/heads/master' && 'production' || format('verification-{0}', github.ref) }}
   cancel-in-progress: true
 
 jobs:
