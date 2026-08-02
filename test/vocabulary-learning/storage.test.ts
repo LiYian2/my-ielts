@@ -12,6 +12,7 @@ import { useLearningProgress } from '../../src/features/vocabulary-learning/useL
 
 class MemoryStorage implements Storage {
   private values = new Map<string, string>()
+  operations: Array<{ type: 'remove' | 'set'; key: string; value?: string }> = []
   failGet = false
   failSet = false
   failRemove = false
@@ -35,12 +36,14 @@ class MemoryStorage implements Storage {
   }
 
   removeItem(key: string): void {
+    this.operations.push({ type: 'remove', key })
     if (this.failRemove)
       throw new Error('remove failed')
     this.values.delete(key)
   }
 
   setItem(key: string, value: string): void {
+    this.operations.push({ type: 'set', key, value })
     if (this.failSet)
       throw new Error('set failed')
     this.values.set(key, value)
@@ -336,6 +339,57 @@ describe('useLearningProgress', () => {
     storage.failRemove = true
     progress.resetProgress()
     expect(progress.state.value).toEqual({ schemaVersion: 1, words: {}, answers: {}, completedLessons: [] })
+    expect(progress.persistenceError.value).toBeTruthy()
+  })
+
+  it('retries a failed initial recovery before persisting a later user action', () => {
+    const storage = new MemoryStorage()
+    const raw = '{corrupt raw JSON'
+    const now = new Date('2026-08-03T12:34:56.789Z')
+    const recoveryKey = `${RECOVERY_STORAGE_KEY_PREFIX}${now.toISOString()}`
+    storage.setItem(LEARNING_STORAGE_KEY, raw)
+    storage.failSet = true
+
+    const progress = useLearningProgress({ storage, now: () => now })
+
+    expect(progress.state.value).toEqual({ schemaVersion: 1, words: {}, answers: {}, completedLessons: [] })
+    expect(progress.persistenceError.value).toBeTruthy()
+    expect(storage.getItem(LEARNING_STORAGE_KEY)).toBe(raw)
+    storage.failSet = false
+    storage.operations = []
+
+    progress.recordWordExposure('04-space-exploration:orbit')
+
+    expect(storage.getItem(recoveryKey)).toBe(raw)
+    expect(loadLearningState(storage)).toMatchObject({
+      words: { '04-space-exploration:orbit': { state: 'understood' } },
+    })
+    expect(storage.operations).toEqual([
+      { type: 'set', key: recoveryKey, value: raw },
+      { type: 'remove', key: LEARNING_STORAGE_KEY },
+      { type: 'set', key: LEARNING_STORAGE_KEY, value: exportLearningState(progress.state.value) },
+    ])
+    expect(progress.persistenceError.value).toBeNull()
+  })
+
+  it('does not overwrite corrupt active data while a pending recovery still fails or conflicts', () => {
+    const storage = new MemoryStorage()
+    const raw = '{corrupt raw JSON'
+    storage.setItem(LEARNING_STORAGE_KEY, raw)
+    storage.failSet = true
+    const progress = useLearningProgress({ storage, now: () => new Date('2026-08-03T12:34:56.789Z') })
+    storage.operations = []
+
+    progress.recordWordExposure('04-space-exploration:orbit')
+    expect(storage.getItem(LEARNING_STORAGE_KEY)).toBe(raw)
+    expect(progress.persistenceError.value).toBeTruthy()
+
+    storage.failSet = false
+    storage.setItem(LEARNING_STORAGE_KEY, 'externally changed')
+    storage.operations = []
+    progress.recordWordReview('04-space-exploration:orbit', 'unaided')
+    expect(storage.getItem(LEARNING_STORAGE_KEY)).toBe('externally changed')
+    expect(storage.operations).toEqual([])
     expect(progress.persistenceError.value).toBeTruthy()
   })
 

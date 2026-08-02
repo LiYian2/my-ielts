@@ -9,6 +9,16 @@ const REVIEW_OUTCOMES: ReviewOutcome[] = ['unaided', 'prompted', 'failed']
 const DATE_KEY_PATTERN = /^\d{4}-\d{2}-\d{2}$/
 const ENTRY_ID_PATTERN = /^[^:\s]+:[^:\s]+$/
 
+export interface PendingLearningStateRecovery {
+  raw: string
+  now: Date
+}
+
+export interface LearningStateLoadResult {
+  state: LearningStateV1
+  pendingRecovery?: PendingLearningStateRecovery
+}
+
 export function createLearningState(): LearningStateV1 {
   return {
     schemaVersion: 1,
@@ -19,16 +29,33 @@ export function createLearningState(): LearningStateV1 {
 }
 
 export function loadLearningState(storage: Storage, now = new Date()): LearningStateV1 {
+  return loadLearningStateWithRecovery(storage, now).state
+}
+
+export function loadLearningStateWithRecovery(storage: Storage, now = new Date()): LearningStateLoadResult {
   const raw = storage.getItem(LEARNING_STORAGE_KEY)
   if (raw === null)
-    return createLearningState()
+    return { state: createLearningState() }
 
   try {
-    return parseLearningState(raw)
+    return { state: parseLearningState(raw) }
   }
   catch {
-    recoverInvalidState(storage, raw, now)
-    return createLearningState()
+    const pendingRecovery = { raw, now: new Date(now.valueOf()) }
+    return recoverInvalidState(storage, pendingRecovery)
+      ? { state: createLearningState() }
+      : { state: createLearningState(), pendingRecovery }
+  }
+}
+
+export function retryPendingLearningStateRecovery(storage: Storage, pendingRecovery: PendingLearningStateRecovery): 'conflict' | 'failed' | 'recovered' {
+  try {
+    if (storage.getItem(LEARNING_STORAGE_KEY) !== pendingRecovery.raw)
+      return 'conflict'
+    return recoverInvalidState(storage, pendingRecovery) ? 'recovered' : 'failed'
+  }
+  catch {
+    return 'failed'
   }
 }
 
@@ -210,19 +237,21 @@ function addCalendarDays(dateKey: string, days: number): string {
   return [date.getFullYear(), String(date.getMonth() + 1).padStart(2, '0'), String(date.getDate()).padStart(2, '0')].join('-')
 }
 
-function recoverInvalidState(storage: Storage, raw: string, now: Date): void {
+function recoverInvalidState(storage: Storage, pendingRecovery: PendingLearningStateRecovery): boolean {
   try {
-    const baseKey = `${RECOVERY_STORAGE_KEY_PREFIX}${now.toISOString()}`
+    const baseKey = `${RECOVERY_STORAGE_KEY_PREFIX}${pendingRecovery.now.toISOString()}`
     let recoveryKey = baseKey
     let suffix = 1
     while (storage.getItem(recoveryKey) !== null) {
       recoveryKey = `${baseKey}:${suffix}`
       suffix += 1
     }
-    storage.setItem(recoveryKey, raw)
+    storage.setItem(recoveryKey, pendingRecovery.raw)
     storage.removeItem(LEARNING_STORAGE_KEY)
+    return true
   }
   catch {
     // The active value remains untouched unless its recovery copy was written first.
+    return false
   }
 }

@@ -1,11 +1,13 @@
 import { type Ref, ref } from 'vue'
 import { createWordProgress, recordExposure, recordProduction, recordReview } from './review'
 import {
+  type LearningStateLoadResult,
   createLearningState,
   exportLearningState,
-  loadLearningState,
+  loadLearningStateWithRecovery,
   parseLearningState,
   resetLearningState,
+  retryPendingLearningStateRecovery,
   saveLearningState,
 } from './storage'
 import type { EntryId, LearningStateV1, ReviewOutcome, SavedAnswer } from './types'
@@ -19,13 +21,17 @@ export function useLearningProgress(options: LearningProgressOptions = {}) {
   const now = options.now ?? (() => new Date())
   const storage = options.storage ?? browserStorage()
   const persistenceError = ref<string | null>(null)
-  const state = ref(loadInitialState(storage, now, persistenceError)) as Ref<LearningStateV1>
+  const initial = loadInitialState(storage, now, persistenceError)
+  let pendingRecovery = initial.pendingRecovery
+  const state = ref(initial.state) as Ref<LearningStateV1>
 
   function persist(): void {
     if (!storage) {
       persistenceError.value = 'Learning progress storage is unavailable'
       return
     }
+    if (!recoverPendingStorage())
+      return
 
     try {
       saveLearningState(storage, state.value)
@@ -88,6 +94,8 @@ export function useLearningProgress(options: LearningProgressOptions = {}) {
       persistenceError.value = 'Learning progress storage is unavailable'
       return
     }
+    if (!recoverPendingStorage())
+      return
 
     try {
       resetLearningState(storage)
@@ -110,6 +118,22 @@ export function useLearningProgress(options: LearningProgressOptions = {}) {
     persist()
   }
 
+  function recoverPendingStorage(): boolean {
+    if (!pendingRecovery || !storage)
+      return true
+
+    const outcome = retryPendingLearningStateRecovery(storage, pendingRecovery)
+    if (outcome === 'recovered') {
+      pendingRecovery = undefined
+      return true
+    }
+
+    persistenceError.value = outcome === 'conflict'
+      ? 'Learning progress changed before corrupt-state recovery could finish'
+      : 'Learning progress recovery is pending'
+    return false
+  }
+
   return {
     state,
     persistenceError,
@@ -124,18 +148,21 @@ export function useLearningProgress(options: LearningProgressOptions = {}) {
   }
 }
 
-function loadInitialState(storage: Storage | undefined, now: () => Date, persistenceError: Ref<string | null>): LearningStateV1 {
+function loadInitialState(storage: Storage | undefined, now: () => Date, persistenceError: Ref<string | null>): LearningStateLoadResult {
   if (!storage) {
     persistenceError.value = 'Learning progress storage is unavailable'
-    return createLearningState()
+    return { state: createLearningState() }
   }
 
   try {
-    return loadLearningState(storage, now())
+    const result = loadLearningStateWithRecovery(storage, now())
+    if (result.pendingRecovery)
+      persistenceError.value = 'Learning progress recovery is pending'
+    return result
   }
   catch (error) {
     persistenceError.value = storageErrorMessage(error)
-    return createLearningState()
+    return { state: createLearningState() }
   }
 }
 
