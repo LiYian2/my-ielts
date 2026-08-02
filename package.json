@@ -5,7 +5,7 @@
     "build": "vite build && node scripts/prune-legacy-topic-audio.mjs",
     "check": "pnpm lint && pnpm typecheck && pnpm test -- --run && pnpm build && pnpm check:pages-assets",
     "check:pages-assets": "node scripts/validate-pages-assets.mjs dist",
-    "deploy:pages": "wrangler pages deploy dist --project-name my-ielts --branch master",
+    "deploy:pages": "wrangler pages deploy dist --project-name liyian2-my-ielts --branch master",
     "dev": "vite --port 3333 --open",
     "lint": "eslint .",
     "typecheck": "vue-tsc --noEmit",

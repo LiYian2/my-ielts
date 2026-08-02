@@ -12,7 +12,7 @@ const nodeSetupAction = 'actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d682
 describe('Cloudflare Pages deployment', () => {
   it('declares the expected Pages project and output directory', () => {
     const config = read('wrangler.toml')
-    expect(config).toContain('name = "my-ielts"')
+    expect(config).toContain('name = "liyian2-my-ielts"')
     expect(config).toContain('pages_build_output_dir = "dist"')
   })
 
@@ -41,7 +41,7 @@ describe('Cloudflare Pages deployment', () => {
     expect(workflow).toContain('if: github.event_name != \'pull_request\' && github.ref == \'refs/heads/master\'')
     expect(workflow.indexOf('run: pnpm check')).toBeLessThan(deployStart)
     expect(deployment).toContain('pnpm exec wrangler pages deploy dist')
-    expect(deployment).toContain('--project-name my-ielts')
+    expect(deployment).toContain('--project-name liyian2-my-ielts')
     expect(deployment).toContain('--branch master')
     for (const secret of ['CLOUDFLARE_API_TOKEN', 'CLOUDFLARE_ACCOUNT_ID']) {
       expect(deployment).toContain(`${secret}: ${secretReference(secret)}`)
@@ -55,7 +55,8 @@ describe('Cloudflare Pages deployment', () => {
   })
 
   it('publishes the fork and Cloudflare URLs', () => {
-    expect(read('README.md')).toContain('https://my-ielts.pages.dev')
+    expect(read('README.md')).toContain('<h2>在线地址 <a href="https://liyian2-my-ielts.pages.dev">https://liyian2-my-ielts.pages.dev</a></h2>')
+    expect(read('README.md')).not.toContain('https://my-ielts.pages.dev')
     expect(read('src/components/TheHeader.vue')).toContain('https://github.com/LiYian2/my-ielts')
   })
 

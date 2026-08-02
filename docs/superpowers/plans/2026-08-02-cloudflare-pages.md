@@ -2,16 +2,16 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Publish the existing Vite site at `https://my-ielts.pages.dev` and make pushes to `master` deploy through GitHub Actions.
+**Goal:** Publish the existing Vite site at `https://liyian2-my-ielts.pages.dev` and make pushes to `master` deploy through GitHub Actions.
 
-**Architecture:** Keep the application as a static Vite build using hash routing. A Direct Upload Cloudflare Pages project named `my-ielts` receives `dist` from a GitHub Actions workflow authenticated by a scoped API token; pull requests run the same verification without deploying.
+**Architecture:** Keep the application as a static Vite build using hash routing. A Direct Upload Cloudflare Pages project named `liyian2-my-ielts` receives `dist` from a GitHub Actions workflow authenticated by a scoped API token; pull requests run the same verification without deploying.
 
 **Tech Stack:** Vue 3, Vite 4, pnpm 8.6.10, Vitest, GitHub Actions, Wrangler 4.118.0, Cloudflare Pages Direct Upload
 
 ## Global Constraints
 
-- Production URL is exactly `https://my-ielts.pages.dev`.
-- Cloudflare Pages project name is exactly `my-ielts`.
+- Production URL is exactly `https://liyian2-my-ielts.pages.dev`.
+- Cloudflare Pages project name is exactly `liyian2-my-ielts`.
 - Production branch is `master`.
 - Pull requests never receive production credentials and never deploy.
 - Do not delete the existing `gh-pages` branch.
@@ -72,7 +72,7 @@ Set these exact `package.json` values:
   "scripts": {
     "build": "vite build",
     "check": "pnpm lint && pnpm typecheck && pnpm test -- --run && pnpm build",
-    "deploy:pages": "wrangler pages deploy dist --project-name my-ielts --branch master",
+    "deploy:pages": "wrangler pages deploy dist --project-name liyian2-my-ielts --branch master",
     "dev": "vite --port 3333 --open",
     "lint": "eslint .",
     "preview": "vite preview",
@@ -129,7 +129,7 @@ const read = (path: string) => readFileSync(new URL(`../${path}`, import.meta.ur
 describe('Cloudflare Pages deployment', () => {
   it('declares the expected Pages project and output directory', () => {
     const config = read('wrangler.toml')
-    expect(config).toContain('name = "my-ielts"')
+    expect(config).toContain('name = "liyian2-my-ielts"')
     expect(config).toContain('pages_build_output_dir = "dist"')
   })
 
@@ -161,7 +161,7 @@ Expected: FAIL because `wrangler.toml` does not exist and the old workflow still
 Create `wrangler.toml`:
 
 ```toml
-name = "my-ielts"
+name = "liyian2-my-ielts"
 pages_build_output_dir = "dist"
 ```
 
@@ -214,7 +214,7 @@ jobs:
         if: github.event_name != 'pull_request'
         run: >-
           pnpm exec wrangler pages deploy dist
-          --project-name my-ielts
+          --project-name liyian2-my-ielts
           --branch master
           --commit-hash "${GITHUB_SHA}"
           --commit-message "${GITHUB_COMMIT_MESSAGE}"
@@ -247,7 +247,7 @@ git commit -m "ci: deploy site to Cloudflare Pages"
 - Modify: `src/components/TheHeader.vue`
 
 **Interfaces:**
-- Produces: public site link `https://my-ielts.pages.dev`.
+- Produces: public site link `https://liyian2-my-ielts.pages.dev`.
 - Produces: repository link `https://github.com/LiYian2/my-ielts`.
 
 - [ ] **Step 1: Write a failing public-link test**
@@ -256,7 +256,8 @@ Append to `test/deployment-config.test.ts`:
 
 ```ts
 it('publishes the fork and Cloudflare URLs', () => {
-  expect(read('README.md')).toContain('https://my-ielts.pages.dev')
+  expect(read('README.md')).toContain('<h2>在线地址 <a href="https://liyian2-my-ielts.pages.dev">https://liyian2-my-ielts.pages.dev</a></h2>')
+  expect(read('README.md')).not.toContain('https://my-ielts.pages.dev')
   expect(read('src/components/TheHeader.vue')).toContain('https://github.com/LiYian2/my-ielts')
 })
 ```
@@ -274,7 +275,7 @@ Expected: FAIL because both files still point to the upstream owner's URLs.
 In `README.md`, replace the online address heading with:
 
 ```html
-<h2>在线地址 <a href="https://my-ielts.pages.dev">https://my-ielts.pages.dev</a></h2>
+<h2>在线地址 <a href="https://liyian2-my-ielts.pages.dev">https://liyian2-my-ielts.pages.dev</a></h2>
 ```
 
 In `src/components/TheHeader.vue`, set the GitHub anchor to:
@@ -299,7 +300,7 @@ git commit -m "docs: point site links at fork deployment"
 **Interfaces:**
 - Consumes: Cloudflare account `2703824a94ead093a61d95a442e43816`.
 - Consumes: GitHub repository `LiYian2/my-ielts`.
-- Produces: production deployment at `https://my-ielts.pages.dev`.
+- Produces: production deployment at `https://liyian2-my-ielts.pages.dev`.
 
 - [ ] **Step 1: Confirm the project name is available or already owned**
 
@@ -307,15 +308,15 @@ git commit -m "docs: point site links at fork deployment"
 ssh home-local 'npx wrangler pages project list'
 ```
 
-Expected: either no `my-ielts` entry or an existing `my-ielts` project in the authenticated account. If another account owns the global name and Cloudflare assigns a suffixed hostname, stop and ask the user to choose a new project name because the approved URL cannot be met.
+Expected: either no `liyian2-my-ielts` entry or an existing `liyian2-my-ielts` project in the authenticated account. If another account owns the global name and Cloudflare assigns a suffixed hostname, stop and ask the user to choose a new project name because the approved URL cannot be met.
 
 - [ ] **Step 2: Create the Direct Upload project when absent**
 
 ```bash
-ssh home-local 'npx wrangler pages project create my-ielts --production-branch master'
+ssh home-local 'npx wrangler pages project create liyian2-my-ielts --production-branch master'
 ```
 
-Expected: project `my-ielts` is created with production branch `master`. If Step 1 showed it already exists, skip creation.
+Expected: project `liyian2-my-ielts` is created with production branch `master`. If Step 1 showed it already exists, skip creation.
 
 - [ ] **Step 3: Create a scoped Cloudflare API token**
 
@@ -352,8 +353,8 @@ Expected: install, verify, and deploy steps all pass.
 - [ ] **Step 7: Verify production**
 
 ```bash
-curl -I https://my-ielts.pages.dev
-curl -I https://my-ielts.pages.dev/vocabulary/audio/04_%E5%A4%AA%E7%A9%BA%E6%8E%A2%E7%B4%A2/galaxy.mp3
+curl -I https://liyian2-my-ielts.pages.dev
+curl -I https://liyian2-my-ielts.pages.dev/vocabulary/audio/04_%E5%A4%AA%E7%A9%BA%E6%8E%A2%E7%B4%A2/galaxy.mp3
 ```
 
 Expected: both requests return a successful HTTP status. Open the site in a browser and check `/`, `/#/vocabulary`, and `/#/vocabulary/typing` before declaring the deployment complete.
@@ -365,4 +366,3 @@ Expected: both requests return a successful HTTP status. Open the site in a brow
 - Spec coverage: project configuration, CI separation, credentials, public links, first deployment, and post-deploy verification are all assigned to tasks.
 - Placeholder scan: no implementation placeholders remain; the only runtime-only value is the secret token created securely by the user.
 - Interface consistency: project name, branch, output path, URLs, secret names, pnpm version, and Wrangler version are identical across tasks.
-
