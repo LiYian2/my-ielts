@@ -40,6 +40,13 @@ function resolvedWord(entryId: EntryId | null): { entry: CanonicalEntry; card: W
 }
 
 const selectedWord = computed(() => resolvedWord(selectedEntryId.value))
+const passageParagraphs = computed(() => props.lesson.passage.map((paragraph, paragraphIndex) => ({
+  key: paragraphIndex,
+  segments: paragraph.segments.map((segment, segmentIndex) => ({
+    ...segment,
+    key: `${paragraphIndex}:${segmentIndex}`,
+  })),
+})))
 
 function openCard(entryId: EntryId): void {
   if (!resolvedWord(entryId) || selectedEntryId.value === entryId)
@@ -84,17 +91,19 @@ watch(() => props.lesson, () => {
       </p>
     </div>
 
-    <article data-passage class="space-y-4 rounded-lg bg-white p-5 leading-7 shadow-sm dark:bg-gray-800 dark:text-gray-100">
-      <p v-for="(paragraph, paragraphIndex) in lesson.passage" :key="paragraphIndex">
-        <template v-for="segment in paragraph.segments" :key="segment.entryId ?? segment.text">
+    <article data-passage class="rounded-lg bg-white p-5 leading-7 shadow-sm space-y-4 dark:bg-gray-800 dark:text-gray-100">
+      <p v-for="paragraph in passageParagraphs" :key="paragraph.key">
+        <template v-for="segment in paragraph.segments" :key="segment.key">
           <button
             v-if="segment.entryId"
             :data-entry-id="segment.entryId"
             type="button"
-            class="rounded px-0.5 font-semibold text-blue-700 underline decoration-blue-300 underline-offset-2 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-blue-300"
+            class="rounded px-0.5 font-semibold text-blue-700 underline decoration-blue-300 underline-offset-2 dark:text-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
             :aria-label="`查看 ${segment.text} 的词汇卡`"
             @click="openCard(segment.entryId)"
-          >{{ segment.text }}</button>
+          >
+            {{ segment.text }}
+          </button>
           <span v-else>{{ segment.text }}</span>
         </template>
       </p>
@@ -103,15 +112,17 @@ watch(() => props.lesson, () => {
     <div>
       <button
         type="button"
-        class="rounded border border-gray-300 px-3 py-2 text-sm text-gray-700 dark:border-gray-600 dark:text-gray-200"
+        class="border border-gray-300 rounded px-3 py-2 text-sm text-gray-700 dark:border-gray-600 dark:text-gray-200"
         :aria-expanded="isTranslationVisible"
         aria-controls="lesson-translation"
         @click="isTranslationVisible = !isTranslationVisible"
       >
         {{ isTranslationVisible ? '隐藏中文翻译' : '显示中文翻译' }}
       </button>
-      <div v-if="isTranslationVisible" id="lesson-translation" class="mt-3 space-y-2 rounded border border-gray-200 p-4 text-sm text-gray-700 dark:border-gray-700 dark:text-gray-200">
-        <p v-for="(paragraph, index) in lesson.translation" :key="index">{{ paragraph }}</p>
+      <div v-if="isTranslationVisible" id="lesson-translation" class="mt-3 border border-gray-200 rounded p-4 text-sm text-gray-700 space-y-2 dark:border-gray-700 dark:text-gray-200">
+        <p v-for="(paragraph, index) in lesson.translation" :key="index">
+          {{ paragraph }}
+        </p>
       </div>
     </div>
 

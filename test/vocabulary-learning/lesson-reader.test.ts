@@ -1,5 +1,5 @@
 import { flushPromises, mount } from '@vue/test-utils'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import LessonReader from '../../src/components/vocabulary-learning/LessonReader.vue'
 import type { CanonicalTopic, EntryId, Lesson, WordCard } from '../../src/features/vocabulary-learning/types'
 
@@ -84,11 +84,12 @@ class FakeAudio {
   pauseCalls = 0
   playCalls = 0
   shouldRejectPlay = false
+  nextPlay: Promise<void> | null = null
   private readonly listeners = new Map<string, Set<EventListener>>()
 
   play(): Promise<void> {
     this.playCalls += 1
-    return this.shouldRejectPlay ? Promise.reject(new Error('unavailable')) : Promise.resolve()
+    return this.nextPlay ?? (this.shouldRejectPlay ? Promise.reject(new Error('unavailable')) : Promise.resolve())
   }
 
   pause(): void {
@@ -109,6 +110,18 @@ class FakeAudio {
     for (const listener of this.listeners.get(type) ?? [])
       listener(new Event(type))
   }
+
+  listenerCount(type: string): number {
+    return this.listeners.get(type)?.size ?? 0
+  }
+}
+
+function deferred() {
+  let rejectDeferred: (reason?: unknown) => void = () => {}
+  const promise = new Promise<void>((_resolve, reject) => {
+    rejectDeferred = reject
+  })
+  return { promise, reject: rejectDeferred }
 }
 
 function mountReader(audio = new FakeAudio()) {
@@ -201,5 +214,56 @@ describe('contextual lesson reader', () => {
 
     expect(wrapper.get('[data-action="play-audio"]').attributes('disabled')).toBeDefined()
     expect(wrapper.text()).toContain('音频不可用')
+  })
+
+  it('ignores an older deferred rejection after a newer word starts playing', async () => {
+    const audio = new FakeAudio()
+    const firstPlay = deferred()
+    audio.nextPlay = firstPlay.promise
+    const { wrapper } = mountReader(audio)
+
+    await wrapper.get(`[data-entry-id="${galaxyId}"]`).trigger('click')
+    await wrapper.get('[data-action="play-audio"]').trigger('click')
+    audio.nextPlay = null
+    await wrapper.get(`[data-entry-id="${cosmosId}"]`).trigger('click')
+    await wrapper.get('[data-action="play-audio"]').trigger('click')
+    firstPlay.reject(new Error('late failure'))
+    await flushPromises()
+
+    expect(wrapper.get('[data-action="play-audio"]').attributes('disabled')).toBeUndefined()
+    expect(wrapper.text()).not.toContain('音频不可用')
+    await wrapper.get(`[data-entry-id="${galaxyId}"]`).trigger('click')
+    expect(wrapper.get('[data-action="play-audio"]').attributes('disabled')).toBeUndefined()
+  })
+
+  it('ignores a deferred rejection after unmounting the panel', async () => {
+    const audio = new FakeAudio()
+    const pendingPlay = deferred()
+    audio.nextPlay = pendingPlay.promise
+    const { wrapper } = mountReader(audio)
+
+    await wrapper.get(`[data-entry-id="${galaxyId}"]`).trigger('click')
+    await wrapper.get('[data-action="play-audio"]').trigger('click')
+    wrapper.unmount()
+    pendingPlay.reject(new Error('late failure'))
+    await flushPromises()
+
+    expect(audio.listenerCount('error')).toBe(0)
+  })
+
+  it('creates one audio player for the card lifecycle and removes its listener on unmount', async () => {
+    const audio = new FakeAudio()
+    const audioFactory = vi.fn(() => audio)
+    const wrapper = mount(LessonReader, { props: { lesson, topic, wordCards, audioFactory } })
+
+    await wrapper.get(`[data-entry-id="${galaxyId}"]`).trigger('click')
+    await wrapper.get('[data-action="play-audio"]').trigger('click')
+    await wrapper.get(`[data-entry-id="${cosmosId}"]`).trigger('click')
+    await wrapper.get('[data-action="play-audio"]').trigger('click')
+
+    expect(audioFactory).toHaveBeenCalledTimes(1)
+    expect(audio.listenerCount('error')).toBe(1)
+    wrapper.unmount()
+    expect(audio.listenerCount('error')).toBe(0)
   })
 })
