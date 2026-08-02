@@ -3,7 +3,7 @@
   "packageManager": "pnpm@8.6.10",
   "scripts": {
     "build": "vite build && node scripts/prune-legacy-topic-audio.mjs",
-    "check": "pnpm lint && pnpm typecheck && pnpm test -- --run && pnpm build && pnpm check:pages-assets",
+    "check": "pnpm lint && pnpm typecheck && pnpm test -- --run && pnpm validate:content && pnpm build && pnpm check:pages-assets",
     "check:pages-assets": "node scripts/validate-pages-assets.mjs dist",
     "deploy:pages": "wrangler pages deploy dist --project-name liyian2-my-ielts --branch master",
     "dev": "vite --port 3333 --open",
@@ -11,6 +11,7 @@
     "typecheck": "vue-tsc --noEmit",
     "preview": "vite preview",
     "test": "vitest",
+    "validate:content": "vitest run test/vocabulary-learning/validate.test.ts",
     "up": "taze major -I"
   },
   "dependencies": {
