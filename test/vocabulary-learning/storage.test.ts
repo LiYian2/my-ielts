@@ -202,6 +202,19 @@ describe('vocabulary learning storage', () => {
       { ...savedState(), recalls: { bad: { ...savedState().recalls['lesson-1-recall-orbit'], entryId: '04-space-exploration:missing' } } },
       { ...savedState(), recalls: { bad: { ...savedState().recalls['lesson-1-recall-orbit'], outcome: 'guessed' } } },
       { ...savedState(), recalls: { bad: { ...savedState().recalls['lesson-1-recall-orbit'], completedOn: '2026-02-30' } } },
+      {
+        ...savedState(),
+        words: {
+          '04-space-exploration:orbit': {
+            state: 'understood' as const,
+            intervalIndex: 0,
+            nextReviewOn: null,
+            unaidedRecallDates: [],
+            productionDates: [],
+            lastOutcome: null,
+          },
+        },
+      },
     ]
 
     for (const state of invalidStates)
@@ -231,7 +244,9 @@ describe('vocabulary learning storage', () => {
     const storage = new MemoryStorage()
     const base = savedState()
     const productionFirst = {
-      ...base,
+      schemaVersion: base.schemaVersion,
+      answers: base.answers,
+      completedLessons: base.completedLessons,
       words: {
         '04-space-exploration:orbit': {
           state: 'understood' as const,

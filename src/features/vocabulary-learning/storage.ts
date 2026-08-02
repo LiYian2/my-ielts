@@ -140,6 +140,10 @@ function validateRecallRecords(value: unknown, words: Record<EntryId, WordProgre
       || !isDateKey(record.completedOn))
       throw new Error('Invalid learning progress import')
 
+    const wordProgress = words[record.entryId as EntryId]!
+    if (record.outcome === 'unaided' && !wordProgress.unaidedRecallDates.includes(record.completedOn))
+      throw new Error('Invalid learning progress import')
+
     return [exerciseId, {
       entryId: record.entryId as EntryId,
       outcome: record.outcome as ReviewOutcome,

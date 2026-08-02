@@ -109,7 +109,7 @@ const dueReviewItems = computed<DelayedReviewItem[]>(() => {
     const card = content.value?.wordCards[entry.id]
     if (!progress || !card || !isDue(progress, now))
       return []
-    return [{ entry, card, mode: delayedReviewModes[index % delayedReviewModes.length]! }]
+    return [{ entry, card, mode: delayedReviewModes[(index + progress.intervalIndex) % delayedReviewModes.length]! }]
   })
 })
 

@@ -97,7 +97,7 @@ vi.mock('../../src/components/vocabulary-learning/DelayedReviewStage.vue', () =>
     props: { items: { required: true, type: Array } },
     emits: ['reviewed'],
     setup(props, { emit }) {
-      return () => h('div', (props.items as Array<{ entry: { id: EntryId } }>).map(item => h('button', { 'data-delayed-review': item.entry.id, 'onClick': () => emit('reviewed', { entryId: item.entry.id, outcome: 'unaided' }) }, item.entry.id)))
+      return () => h('div', (props.items as Array<{ entry: { id: EntryId }; mode: string }>).map(item => h('button', { 'data-delayed-review': item.entry.id, 'data-review-mode': item.mode, 'onClick': () => emit('reviewed', { entryId: item.entry.id, outcome: 'unaided' }) }, item.entry.id)))
     },
   }),
 }))
@@ -272,6 +272,16 @@ describe('active vocabulary topic page', () => {
     await vi.advanceTimersByTimeAsync(10_001)
     expect(wrapper.get('[data-topic-stats]').text()).toMatch(/今日待复习\s*1/)
     await selectStage(wrapper, 'review')
+    const firstReviewMode = wrapper.get(`[data-delayed-review="${orbitId}"]`).attributes('data-review-mode')
+    learningState.value = {
+      ...learningState.value,
+      words: {
+        ...learningState.value.words,
+        [orbitId]: { ...learningState.value.words[orbitId]!, intervalIndex: 1 },
+      },
+    }
+    await nextTick()
+    expect(wrapper.get(`[data-delayed-review="${orbitId}"]`).attributes('data-review-mode')).not.toBe(firstReviewMode)
     await wrapper.get(`[data-delayed-review="${orbitId}"]`).trigger('click')
     expect(progressFacade.recordWordReview).toHaveBeenCalledWith(orbitId, 'unaided')
 
