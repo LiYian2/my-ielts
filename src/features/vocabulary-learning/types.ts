@@ -89,3 +89,16 @@ export interface ValidationIssue {
   path: string
   message: string
 }
+
+export type MasteryState = 'unseen' | 'understood' | 'recallable' | 'active'
+
+export type ReviewOutcome = 'unaided' | 'prompted' | 'failed'
+
+export interface WordProgress {
+  state: MasteryState
+  intervalIndex: number
+  nextReviewOn: string | null
+  unaidedRecallDates: string[]
+  productionDates: string[]
+  lastOutcome: ReviewOutcome | null
+}
