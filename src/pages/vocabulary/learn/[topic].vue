@@ -45,10 +45,12 @@ const isLoading = ref(false)
 const unavailableMessage = ref<string | null>(null)
 const currentLessonIndex = ref(0)
 const currentStage = ref<StageId>('warmup')
+const currentDateKey = ref(localDateKey(new Date()))
 const exposedLessonIds = new Set<string>()
 const reviewedExerciseIds = new Set<string>()
 const recordedProductionTaskIds = new Set<string>()
 let latestRequest = 0
+let midnightTimer: ReturnType<typeof setTimeout> | undefined
 
 const currentLesson = computed<Lesson | null>(() => content.value?.lessons?.[currentLessonIndex.value] ?? null)
 const canonicalTopic = computed(() => content.value?.topicId ? getCanonicalTopic(content.value.topicId) : null)
@@ -56,6 +58,10 @@ const completedLessonIds = computed(() => new Set(learningProgress.state.value.c
 const completedLessonsCount = computed(() => content.value?.lessons.filter(lesson => completedLessonIds.value.has(lesson.id)).length ?? 0)
 const allLessonsComplete = computed(() => Boolean(content.value?.lessons.length) && completedLessonsCount.value === content.value!.lessons.length)
 const isCurrentLessonComplete = computed(() => currentLesson.value ? completedLessonIds.value.has(currentLesson.value.id) : false)
+const isInputComplete = computed(() => currentLesson.value?.targetEntryIds.every((entryId) => {
+  const progress = learningProgress.state.value.words[entryId]
+  return progress !== undefined && progress.state !== 'unseen'
+}) ?? false)
 const requiredWords = computed(() => {
   const words: Partial<Record<EntryId, string>> = {}
   for (const entry of canonicalTopic.value?.entries ?? [])
@@ -64,7 +70,7 @@ const requiredWords = computed(() => {
 })
 const topicStats = computed<TopicStats>(() => {
   const stats: TopicStats = { unseen: 0, understood: 0, recallable: 0, active: 0, due: 0 }
-  const now = new Date()
+  const now = new Date(`${currentDateKey.value}T12:00:00`)
   for (const entry of canonicalTopic.value?.entries ?? []) {
     const progress = learningProgress.state.value.words[entry.id]
     stats[progress?.state ?? 'unseen'] += 1
@@ -75,7 +81,36 @@ const topicStats = computed<TopicStats>(() => {
 })
 
 function selectStage(stage: StageId): void {
+  if (!isStageUnlocked(stage))
+    return
   currentStage.value = stage
+}
+
+function isStageUnlocked(stage: StageId): boolean {
+  if (stage === 'warmup' || stage === 'input')
+    return true
+
+  const lesson = currentLesson.value
+  if (!lesson)
+    return false
+  if (stage === 'recall')
+    return isInputComplete.value
+  if (stage === 'production')
+    return isRecallComplete(lesson)
+  return isProductionComplete(lesson) || completedLessonIds.value.has(lesson.id)
+}
+
+function stageStatus(): string {
+  if (!currentLesson.value || isStageUnlocked(currentStage.value)) {
+    if (!isInputComplete.value)
+      return '完成语境输入后解锁主动回忆。'
+    if (!isRecallComplete(currentLesson.value!))
+      return '完成所有主动回忆题后解锁主动使用。'
+    if (!isProductionComplete(currentLesson.value!))
+      return '完成所有主动使用任务后解锁延迟复习。'
+    return '本课所有阶段均可回访。'
+  }
+  return '完成前置学习阶段后即可继续。'
 }
 
 function navigateLesson(offset: number): void {
@@ -89,12 +124,20 @@ function navigateLesson(offset: number): void {
 
 function recordExposure(entryIds: EntryId[]): void {
   const lesson = currentLesson.value
-  if (!lesson || exposedLessonIds.has(lesson.id))
+  if (!lesson)
+    return
+  if (isInputComplete.value) {
+    currentStage.value = 'recall'
+    return
+  }
+  if (exposedLessonIds.has(lesson.id))
     return
 
   exposedLessonIds.add(lesson.id)
   for (const entryId of new Set(entryIds))
     learningProgress.recordWordExposure(entryId)
+  if (isInputComplete.value)
+    currentStage.value = 'recall'
 }
 
 function recordReview(event: { entryId: EntryId; outcome: ReviewOutcome }): void {
@@ -108,6 +151,8 @@ function recordReview(event: { entryId: EntryId; outcome: ReviewOutcome }): void
 
   reviewedExerciseIds.add(exercise.id)
   learningProgress.recordWordReview(event.entryId, event.outcome)
+  if (isRecallComplete(lesson))
+    currentStage.value = 'production'
   completeLessonWhenReady(lesson)
 }
 
@@ -134,6 +179,8 @@ function recordProduction(event: { taskId: string; entryIds: EntryId[] }): void 
   }
   if (lessonTask && lesson)
     completeLessonWhenReady(lesson)
+  if (lessonTask && lesson && isProductionComplete(lesson))
+    currentStage.value = 'review'
 }
 
 function isSubmittedProductionTask(task: ProductionTask): boolean {
@@ -142,7 +189,7 @@ function isSubmittedProductionTask(task: ProductionTask): boolean {
 }
 
 function isRecallComplete(lesson: Lesson): boolean {
-  return lesson.recallExercises.every(exercise => learningProgress.state.value.words[exercise.entryId]?.lastOutcome !== null)
+  return lesson.recallExercises.every(exercise => learningProgress.state.value.words[exercise.entryId]?.lastOutcome != null)
 }
 
 function isProductionComplete(lesson: Lesson): boolean {
@@ -156,6 +203,35 @@ function completeLessonWhenReady(lesson: Lesson): void {
   learningProgress.completeLesson(lesson.id)
 }
 
+function reconcileCompletedLessons(loadedContent: TopicContent): void {
+  if (!Array.isArray(loadedContent.lessons))
+    return
+  for (const lesson of loadedContent.lessons)
+    completeLessonWhenReady(lesson)
+}
+
+function clearPageLocalProgress(): void {
+  exposedLessonIds.clear()
+  reviewedExerciseIds.clear()
+  recordedProductionTaskIds.clear()
+}
+
+function scheduleMidnightRefresh(): void {
+  const now = new Date()
+  const nextMidnight = new Date(now)
+  nextMidnight.setHours(24, 0, 0, 0)
+  midnightTimer = setTimeout(() => {
+    currentDateKey.value = localDateKey(new Date())
+    scheduleMidnightRefresh()
+  }, Math.max(1, nextMidnight.valueOf() - now.valueOf()))
+}
+
+onMounted(scheduleMidnightRefresh)
+onBeforeUnmount(() => {
+  if (midnightTimer !== undefined)
+    clearTimeout(midnightTimer)
+})
+
 watch(
   () => route.params.topic,
   async (routeTopic) => {
@@ -166,6 +242,7 @@ watch(
     unavailableMessage.value = null
     currentLessonIndex.value = 0
     currentStage.value = 'warmup'
+    clearPageLocalProgress()
     isLoading.value = true
 
     if (!topic || !topic.available || !topic.load) {
@@ -179,6 +256,7 @@ watch(
       if (request !== latestRequest)
         return
       content.value = loadedContent
+      reconcileCompletedLessons(loadedContent)
     }
     catch {
       if (request !== latestRequest)
@@ -271,10 +349,13 @@ watch(
         </div>
 
         <nav aria-label="学习阶段" class="mt-5 flex flex-wrap gap-2">
-          <button v-for="stage in stages" :key="stage.id" :data-stage="stage.id" type="button" class="rounded px-3 py-2 text-sm" :class="currentStage === stage.id ? 'bg-blue-700 text-white' : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-100'" :aria-current="currentStage === stage.id ? 'step' : undefined" @click="selectStage(stage.id)">
+          <button v-for="stage in stages" :key="stage.id" :data-stage="stage.id" type="button" class="rounded px-3 py-2 text-sm disabled:cursor-not-allowed disabled:opacity-60" :class="currentStage === stage.id ? 'bg-blue-700 text-white' : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-100'" :aria-current="currentStage === stage.id ? 'step' : undefined" :aria-describedby="isStageUnlocked(stage.id) ? undefined : 'stage-status'" :disabled="!isStageUnlocked(stage.id)" @click="selectStage(stage.id)">
             {{ stage.label }}
           </button>
         </nav>
+        <p id="stage-status" data-stage-status class="mt-3 text-sm text-gray-600 dark:text-gray-300" role="status">
+          {{ stageStatus() }}
+        </p>
       </section>
 
       <section v-if="currentStage === 'warmup'" class="rounded-lg bg-white p-5 shadow-sm dark:bg-gray-800">

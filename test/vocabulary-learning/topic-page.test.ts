@@ -1,5 +1,5 @@
 import { flushPromises, mount } from '@vue/test-utils'
-import { computed, defineComponent, h, nextTick, reactive, ref } from 'vue'
+import { defineComponent, h, nextTick, reactive, ref } from 'vue'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import TopicPage from '../../src/pages/vocabulary/learn/[topic].vue'
 import type { TopicManifestEntry } from '../../src/features/vocabulary-learning/content/manifest'
@@ -9,8 +9,10 @@ const orbitId = '04-space-exploration:orbit' as EntryId
 const galaxyId = '04-space-exploration:galaxy' as EntryId
 const signalId = '04-space-exploration:signal' as EntryId
 const probeId = '04-space-exploration:probe' as EntryId
+const entryIds = [orbitId, galaxyId, signalId, probeId]
+const rubric = { meaning: true, collocation: true, grammar: true, register: true, relevance: true }
 
-const route = { params: { topic: 'space-exploration' } }
+const route = reactive({ params: { topic: 'space-exploration' } })
 const topics = new Map<string, TopicManifestEntry>()
 const learningState = ref<LearningStateV1>({ schemaVersion: 1, words: {}, answers: {}, completedLessons: [] })
 const progressFacade = {
@@ -21,20 +23,14 @@ const progressFacade = {
   persistenceError: ref<string | null>(null),
   recordWordExposure: vi.fn((entryId: EntryId) => {
     const current = learningState.value.words[entryId]
-    learningState.value = {
-      ...learningState.value,
-      words: {
-        ...learningState.value.words,
-        [entryId]: current ?? { state: 'understood', intervalIndex: 0, nextReviewOn: null, unaidedRecallDates: [], productionDates: [], lastOutcome: null },
-      },
-    }
+    learningState.value = { ...learningState.value, words: { ...learningState.value.words, [entryId]: current ?? wordProgress('understood') } }
   }),
   recordWordProduction: vi.fn((entryId: EntryId) => {
-    const current = learningState.value.words[entryId] ?? { state: 'understood', intervalIndex: 0, nextReviewOn: null, unaidedRecallDates: [], productionDates: [], lastOutcome: null }
+    const current = learningState.value.words[entryId] ?? wordProgress('understood')
     learningState.value = { ...learningState.value, words: { ...learningState.value.words, [entryId]: { ...current, productionDates: ['2026-08-03'] } } }
   }),
   recordWordReview: vi.fn((entryId: EntryId, outcome: 'unaided' | 'prompted' | 'failed') => {
-    const current = learningState.value.words[entryId] ?? { state: 'understood', intervalIndex: 0, nextReviewOn: null, unaidedRecallDates: [], productionDates: [], lastOutcome: null }
+    const current = learningState.value.words[entryId] ?? wordProgress('understood')
     learningState.value = { ...learningState.value, words: { ...learningState.value.words, [entryId]: { ...current, lastOutcome: outcome } } }
   }),
   saveAnswer: vi.fn((answer: LearningStateV1['answers'][string]) => {
@@ -43,21 +39,18 @@ const progressFacade = {
   state: learningState,
 }
 
-vi.mock('vue-router', () => ({ useRoute: () => reactive(route) }))
-vi.mock('../../src/features/vocabulary-learning/content/manifest', () => ({
-  findTopicBySlug: (slug: string) => topics.get(slug),
-}))
+function wordProgress(state: 'unseen' | 'understood' | 'recallable' | 'active' = 'unseen') {
+  return { state, intervalIndex: 0, nextReviewOn: null, unaidedRecallDates: [], productionDates: [], lastOutcome: null }
+}
+
+vi.mock('vue-router', () => ({ useRoute: () => route }))
+vi.mock('../../src/features/vocabulary-learning/content/manifest', () => ({ findTopicBySlug: (slug: string) => topics.get(slug) }))
 vi.mock('../../src/features/vocabulary-learning/canonical', () => ({
   getCanonicalTopic: () => ({
     id: '04-space-exploration',
     label: '04_太空探索',
     chapterAudioPath: '',
-    entries: [
-      { id: orbitId, primaryHeadword: 'orbit' },
-      { id: galaxyId, primaryHeadword: 'galaxy' },
-      { id: signalId, primaryHeadword: 'signal' },
-      { id: probeId, primaryHeadword: 'probe' },
-    ],
+    entries: entryIds.map((id, index) => ({ id, primaryHeadword: ['orbit', 'galaxy', 'signal', 'probe'][index] })),
   }),
 }))
 vi.mock('../../src/features/vocabulary-learning/useLearningProgress', () => ({ useLearningProgress: () => progressFacade }))
@@ -67,7 +60,7 @@ vi.mock('../../src/components/vocabulary-learning/LessonReader.vue', () => ({
     props: { lesson: { required: true, type: Object } },
     emits: ['exposed'],
     setup(props, { emit }) {
-      return () => h('button', { 'data-action': 'expose', 'onClick': () => emit('exposed', (props.lesson as { targetEntryIds: EntryId[] }).targetEntryIds) }, '完成语境输入')
+      return () => h('button', { 'data-action': 'complete-input', 'onClick': () => emit('exposed', (props.lesson as { targetEntryIds: EntryId[] }).targetEntryIds) }, '完成语境输入')
     },
   }),
 }))
@@ -77,7 +70,7 @@ vi.mock('../../src/components/vocabulary-learning/RecallStage.vue', () => ({
     props: { exercises: { required: true, type: Array } },
     emits: ['reviewed'],
     setup(props, { emit }) {
-      return () => h('button', { 'data-action': 'recall', 'onClick': () => emit('reviewed', { entryId: (props.exercises as Array<{ entryId: EntryId }>)[0]!.entryId, outcome: 'unaided' }) }, '提交回忆')
+      return () => h('div', (props.exercises as Array<{ id: string; entryId: EntryId }>).map(exercise => h('button', { 'data-recall': exercise.id, 'onClick': () => emit('reviewed', { entryId: exercise.entryId, outcome: 'unaided' }) }, exercise.id)))
     },
   }),
 }))
@@ -87,62 +80,52 @@ vi.mock('../../src/components/vocabulary-learning/ProductionStage.vue', () => ({
     props: { tasks: { required: true, type: Array } },
     emits: ['answer-saved', 'production-recorded'],
     setup(props, { emit }) {
-      const task = computed(() => (props.tasks as ProductionTask[])[0]!)
-      const answer = computed(() => ({
-        taskId: task.value.id,
-        text: 'A complete learner response.',
-        selfAssessment: { meaning: true, collocation: true, grammar: true, register: true, relevance: true },
-        updatedAt: '2026-08-03T00:00:00.000Z',
-      }))
-      return () => h('div', [
-        ...(props.tasks as ProductionTask[]).map(task => h('p', task.prompt)),
-        h('button', { 'data-action': 'save-production', 'onClick': () => emit('answer-saved', answer.value) }, '保存回答'),
-        h('button', { 'data-action': 'record-production', 'onClick': () => emit('production-recorded', { taskId: task.value.id, entryIds: task.value.requiredEntryIds }) }, '提交主动运用'),
-      ])
+      const answerFor = (task: ProductionTask) => ({ taskId: task.id, text: `A complete ${task.id} response.`, selfAssessment: rubric, updatedAt: '2026-08-03T00:00:00.000Z' })
+      return () => h('div', (props.tasks as ProductionTask[]).flatMap(task => [
+        h('p', task.prompt),
+        h('button', { 'data-save': task.id, 'onClick': () => emit('answer-saved', answerFor(task)) }, `保存 ${task.id}`),
+        h('button', { 'data-record': task.id, 'onClick': () => emit('production-recorded', { taskId: task.id, entryIds: task.requiredEntryIds }) }, `提交 ${task.id}`),
+      ]))
     },
   }),
 }))
 
-function content(): TopicContent {
-  const task = {
-    id: 'lesson-one-production',
-    mode: 'sentence' as const,
-    prompt: 'Use the required word.',
-    requiredEntryIds: [orbitId, galaxyId],
+function tasks(prefix: string): ProductionTask[] {
+  return entryIds.map((entryId, index) => ({
+    id: `${prefix}-production-${index + 1}`,
+    mode: 'sentence',
+    prompt: `Use ${entryId}.`,
+    requiredEntryIds: [entryId],
     referenceAnswer: 'A reference answer.',
     rubric: ['meaning', 'collocation', 'grammar', 'register', 'relevance'],
+  }))
+}
+
+function lesson(id: string) {
+  return {
+    id,
+    title: id,
+    warmupPrompt: `Warm up ${id}`,
+    targetEntryIds: entryIds,
+    passage: [],
+    translation: [],
+    recallExercises: entryIds.map((entryId, index) => ({ id: `${id}-recall-${index + 1}`, entryId, before: '', after: '', acceptedAnswers: [entryId.split(':')[1]!], meaningCue: '提示' })),
+    productionTasks: tasks(id),
   }
+}
+
+function content(title = '太空探索'): TopicContent {
+  const first = lesson('lesson-one')
   return {
     schemaVersion: 1,
     topicId: '04_太空探索',
     slug: 'space-exploration',
-    title: '太空探索',
+    title,
     level: 'B2-C1',
     wordCards: {} as TopicContent['wordCards'],
-    lessons: [
-      {
-        id: 'lesson-one',
-        title: '第一课',
-        warmupPrompt: 'What can you already say?',
-        targetEntryIds: [orbitId, galaxyId],
-        passage: [],
-        translation: [],
-        recallExercises: [{ id: 'lesson-one-recall', entryId: orbitId, before: '', after: '', acceptedAnswers: ['orbit'], meaningCue: '轨道' }],
-        productionTasks: [task],
-      },
-      {
-        id: 'lesson-two',
-        title: '第二课',
-        warmupPrompt: 'What remains?',
-        targetEntryIds: [signalId, probeId],
-        passage: [],
-        translation: [],
-        recallExercises: [{ id: 'lesson-two-recall', entryId: signalId, before: '', after: '', acceptedAnswers: ['signal'], meaningCue: '信号' }],
-        productionTasks: [{ ...task, id: 'lesson-two-production', requiredEntryIds: [signalId, probeId] }],
-      },
-    ],
-    finalSpeaking: { ...task, id: 'final-speaking', mode: 'speaking', prompt: 'IELTS Speaking challenge' },
-    finalWriting: { ...task, id: 'final-writing', mode: 'writing', prompt: 'IELTS Task 2 paragraph challenge' },
+    lessons: [first, lesson('lesson-two')],
+    finalSpeaking: { ...tasks('final')[0]!, id: 'final-speaking', mode: 'speaking', prompt: 'IELTS Speaking challenge' },
+    finalWriting: { ...tasks('final')[1]!, id: 'final-writing', mode: 'writing', prompt: 'IELTS Task 2 paragraph challenge' },
   }
 }
 
@@ -150,15 +133,18 @@ function mountPage() {
   return mount(TopicPage, { global: { components: { RouterLink: { template: '<a><slot /></a>' } } } })
 }
 
-async function showStage(wrapper: ReturnType<typeof mount>, stage: string) {
+async function selectStage(wrapper: ReturnType<typeof mount>, stage: string) {
   await wrapper.get(`[data-stage="${stage}"]`).trigger('click')
 }
 
 describe('active vocabulary topic page', () => {
   beforeEach(() => {
+    vi.useFakeTimers()
+    vi.setSystemTime(new Date(2026, 7, 3, 12))
     route.params.topic = 'space-exploration'
     topics.clear()
     topics.set('space-exploration', { sourceTopicId: '04_太空探索', slug: 'space-exploration', title: '太空探索', available: true, load: async () => ({ default: content() }) })
+    topics.set('space-two', { sourceTopicId: '04_太空探索', slug: 'space-two', title: '第二主题', available: true, load: async () => ({ default: content('第二主题') }) })
     learningState.value = { schemaVersion: 1, words: {}, answers: {}, completedLessons: [] }
     progressFacade.persistenceError.value = null
     progressFacade.completeLesson.mockClear()
@@ -168,78 +154,99 @@ describe('active vocabulary topic page', () => {
     progressFacade.saveAnswer.mockClear()
   })
 
-  afterEach(() => topics.clear())
+  afterEach(() => {
+    topics.clear()
+    vi.useRealTimers()
+  })
 
-  it('renders the five stages in learning order, records input and recall once, and requires submitted recall plus production before completing a lesson', async () => {
+  it('gates forward progress behind explicit input, every recall, and every valid production task while keeping completed stages available backwards', async () => {
     const wrapper = mountPage()
     await flushPromises()
 
     expect(wrapper.findAll('[data-stage]').map(item => item.text().trim())).toEqual(['预热', '语境输入', '主动回忆', '主动使用', '延迟复习'])
-    expect(wrapper.text()).toContain('What can you already say?')
+    expect(wrapper.get('[data-stage="input"]').attributes('disabled')).toBeUndefined()
+    expect(wrapper.get('[data-stage="recall"]').attributes('disabled')).toBeDefined()
+    expect(wrapper.get('[data-stage="production"]').attributes('disabled')).toBeDefined()
+    expect(wrapper.get('[data-stage="review"]').attributes('disabled')).toBeDefined()
+    expect(wrapper.get('[data-stage-status]').text()).toContain('完成语境输入后解锁')
 
-    await showStage(wrapper, 'input')
-    await wrapper.get('[data-action="expose"]').trigger('click')
-    await wrapper.get('[data-action="expose"]').trigger('click')
-    expect(progressFacade.recordWordExposure).toHaveBeenCalledTimes(2)
-    expect(progressFacade.recordWordExposure).toHaveBeenNthCalledWith(1, orbitId)
-    expect(progressFacade.recordWordExposure).toHaveBeenNthCalledWith(2, galaxyId)
+    await selectStage(wrapper, 'input')
+    expect(progressFacade.recordWordExposure).not.toHaveBeenCalled()
+    await wrapper.get('[data-action="complete-input"]').trigger('click')
+    await selectStage(wrapper, 'input')
+    await wrapper.get('[data-action="complete-input"]').trigger('click')
+    expect(progressFacade.recordWordExposure).toHaveBeenCalledTimes(4)
+    expect(wrapper.get('[data-stage="recall"]').attributes('disabled')).toBeUndefined()
+    expect(wrapper.find('[data-recall="lesson-one-recall-1"]').exists()).toBe(true)
 
-    await showStage(wrapper, 'recall')
-    await wrapper.get('[data-action="recall"]').trigger('click')
-    await wrapper.get('[data-action="recall"]').trigger('click')
-    expect(progressFacade.recordWordReview).toHaveBeenCalledTimes(1)
-    expect(progressFacade.recordWordReview).toHaveBeenCalledWith(orbitId, 'unaided')
-    expect(progressFacade.completeLesson).not.toHaveBeenCalled()
+    for (let index = 1; index <= 3; index += 1)
+      await wrapper.get(`[data-recall="lesson-one-recall-${index}"]`).trigger('click')
+    expect(wrapper.get('[data-stage="production"]').attributes('disabled')).toBeDefined()
+    await wrapper.get('[data-recall="lesson-one-recall-4"]').trigger('click')
+    expect(progressFacade.recordWordReview).toHaveBeenCalledTimes(4)
+    expect(wrapper.get('[data-stage="production"]').attributes('disabled')).toBeUndefined()
 
-    await showStage(wrapper, 'production')
-    await wrapper.get('[data-action="save-production"]').trigger('click')
-    await wrapper.get('[data-action="record-production"]').trigger('click')
-    await wrapper.get('[data-action="record-production"]').trigger('click')
-    expect(progressFacade.saveAnswer).toHaveBeenCalledWith(expect.objectContaining({ taskId: 'lesson-one-production' }))
-    expect(progressFacade.recordWordProduction).toHaveBeenCalledTimes(2)
-    expect(progressFacade.recordWordProduction).toHaveBeenCalledWith(orbitId)
-    expect(progressFacade.recordWordProduction).toHaveBeenCalledWith(galaxyId)
+    for (let index = 1; index <= 3; index += 1) {
+      const taskId = `lesson-one-production-${index}`
+      await wrapper.get(`[data-save="${taskId}"]`).trigger('click')
+      await wrapper.get(`[data-record="${taskId}"]`).trigger('click')
+    }
+    expect(wrapper.get('[data-stage="review"]').attributes('disabled')).toBeDefined()
+    const finalTaskId = 'lesson-one-production-4'
+    await wrapper.get(`[data-save="${finalTaskId}"]`).trigger('click')
+    await wrapper.get(`[data-record="${finalTaskId}"]`).trigger('click')
+    expect(progressFacade.recordWordProduction).toHaveBeenCalledTimes(4)
     expect(progressFacade.completeLesson).toHaveBeenCalledWith('lesson-one')
+    expect(wrapper.get('[data-stage="review"]').attributes('disabled')).toBeUndefined()
+
+    await selectStage(wrapper, 'input')
+    expect(wrapper.get('[data-action="complete-input"]').text()).toContain('完成语境输入')
+    expect(wrapper.get('[data-stage="input"]').attributes('disabled')).toBeUndefined()
+    learningState.value = { ...learningState.value, words: {} }
+    route.params.topic = 'space-two'
+    await nextTick()
+    await flushPromises()
+    await selectStage(wrapper, 'input')
+    await wrapper.get('[data-action="complete-input"]').trigger('click')
+    expect(progressFacade.recordWordExposure).toHaveBeenCalledTimes(8)
   })
 
-  it('retains saved progress across lesson navigation, derives completion after reload, exposes all mastery totals and unlocks final tasks only when every lesson is complete', async () => {
+  it('resets route-local de-duplication, reconciles persisted completion after reload, unlocks finals only after every lesson, and refreshes due totals at midnight', async () => {
+    const persistedAnswers = Object.fromEntries(tasks('lesson-one').map(task => [task.id, { taskId: task.id, text: 'Saved.', selfAssessment: rubric, updatedAt: '2026-08-03T00:00:00.000Z' }]))
     learningState.value = {
       schemaVersion: 1,
       words: {
-        [orbitId]: { state: 'understood', intervalIndex: 0, nextReviewOn: null, unaidedRecallDates: [], productionDates: [], lastOutcome: 'prompted' },
-        [galaxyId]: { state: 'recallable', intervalIndex: 0, nextReviewOn: '2026-08-03', unaidedRecallDates: ['2026-08-02'], productionDates: [], lastOutcome: 'unaided' },
-        [signalId]: { state: 'active', intervalIndex: 1, nextReviewOn: '2026-08-06', unaidedRecallDates: ['2026-08-01', '2026-08-02'], productionDates: ['2026-08-02'], lastOutcome: 'unaided' },
+        [orbitId]: { ...wordProgress('understood'), lastOutcome: 'unaided', nextReviewOn: '2026-08-04' },
+        [galaxyId]: { ...wordProgress('understood'), lastOutcome: 'unaided' },
+        [signalId]: { ...wordProgress('understood'), lastOutcome: 'unaided' },
+        [probeId]: { ...wordProgress('understood'), lastOutcome: 'unaided' },
       },
-      answers: {
-        'lesson-one-production': { taskId: 'lesson-one-production', text: 'Saved lesson answer.', selfAssessment: { meaning: true, collocation: true, grammar: true, register: true, relevance: true }, updatedAt: '2026-08-03T00:00:00.000Z' },
-      },
-      completedLessons: ['lesson-one'],
+      answers: persistedAnswers,
+      completedLessons: [],
     }
+    vi.setSystemTime(new Date(2026, 7, 3, 23, 59, 50))
     const wrapper = mountPage()
     await flushPromises()
 
-    expect(wrapper.get('[data-topic-stats]').text()).toMatch(/未接触\s*1/)
-    expect(wrapper.get('[data-topic-stats]').text()).toMatch(/已理解\s*1/)
-    expect(wrapper.get('[data-topic-stats]').text()).toMatch(/可回忆\s*1/)
-    expect(wrapper.get('[data-topic-stats]').text()).toMatch(/可主动使用\s*1/)
-    expect(wrapper.get('[data-topic-stats]').text()).toMatch(/今日待复习\s*1/)
-    expect(wrapper.text()).toContain('完成 1 / 2 课')
+    expect(progressFacade.completeLesson).toHaveBeenCalledTimes(1)
+    expect(progressFacade.completeLesson).toHaveBeenCalledWith('lesson-one')
+    expect(wrapper.get('[data-stage="recall"]').attributes('disabled')).toBeUndefined()
+    expect(wrapper.get('[data-topic-stats]').text()).toMatch(/今日待复习\s*0/)
     expect(wrapper.text()).toContain('完成所有课程后解锁')
-
-    await wrapper.get('[data-action="next-lesson"]').trigger('click')
-    await nextTick()
-    expect(wrapper.text()).toContain('第二课')
-    await wrapper.get('[data-action="previous-lesson"]').trigger('click')
-    expect(wrapper.text()).toContain('第一课')
-    expect(wrapper.text()).toContain('完成 1 / 2 课')
+    await vi.advanceTimersByTimeAsync(10_001)
+    expect(wrapper.get('[data-topic-stats]').text()).toMatch(/今日待复习\s*1/)
 
     learningState.value = { ...learningState.value, completedLessons: ['lesson-one', 'lesson-two'] }
     await nextTick()
     expect(wrapper.text()).toContain('IELTS Speaking')
     expect(wrapper.text()).toContain('IELTS Task 2')
+
+    await selectStage(wrapper, 'input')
+    await wrapper.get('[data-action="complete-input"]').trigger('click')
+    expect(progressFacade.recordWordExposure).not.toHaveBeenCalled()
   })
 
-  it('keeps local persistence failures visible without hiding loaded content', async () => {
+  it('keeps persistence errors visible without hiding loaded content', async () => {
     progressFacade.persistenceError.value = 'Learning progress storage is unavailable'
     const wrapper = mountPage()
     await flushPromises()
