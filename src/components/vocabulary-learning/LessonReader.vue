@@ -24,8 +24,7 @@ const emit = defineEmits(['exposed', 'open-card'])
 
 const selectedEntryId = ref<EntryId | null>(null)
 const isTranslationVisible = ref(false)
-const exposedLessonKeys = new Set<string>()
-const isMounted = ref(false)
+const isInputCompleted = ref(false)
 
 function resolvedWord(entryId: EntryId | null): { entry: CanonicalEntry; card: WordCard } | null {
   if (!entryId)
@@ -57,26 +56,18 @@ function openCard(entryId: EntryId): void {
   emit('open-card', entryId)
 }
 
-function emitExposedTargets(): void {
-  const entryIds = [...new Set(props.lesson.targetEntryIds)]
-  const key = `${props.lesson.id}:${entryIds.join('|')}`
-  if (exposedLessonKeys.has(key))
+function completeInput(): void {
+  if (isInputCompleted.value)
     return
 
-  exposedLessonKeys.add(key)
-  emit('exposed', entryIds)
+  isInputCompleted.value = true
+  emit('exposed', [...new Set(props.lesson.targetEntryIds)])
 }
-
-onMounted(() => {
-  isMounted.value = true
-  emitExposedTargets()
-})
 
 watch(() => props.lesson, () => {
   selectedEntryId.value = null
   isTranslationVisible.value = false
-  if (isMounted.value)
-    emitExposedTargets()
+  isInputCompleted.value = false
 })
 </script>
 
@@ -108,6 +99,18 @@ watch(() => props.lesson, () => {
         </template>
       </p>
     </article>
+
+    <button
+      data-action="complete-input"
+      type="button"
+      class="rounded bg-blue-700 px-4 py-2 text-sm text-white disabled:cursor-not-allowed disabled:opacity-60"
+      aria-label="完成语境输入"
+      :aria-pressed="isInputCompleted"
+      :disabled="isInputCompleted"
+      @click="completeInput"
+    >
+      完成语境输入
+    </button>
 
     <div>
       <button

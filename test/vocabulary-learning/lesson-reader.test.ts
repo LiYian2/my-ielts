@@ -139,13 +139,43 @@ function mountReader(audio = new FakeAudio()) {
 }
 
 describe('contextual lesson reader', () => {
-  it('preserves passage segment order and whitespace, exposes unique targets once, and uses accessible target buttons', () => {
+  it('preserves passage segment order and whitespace without recording exposure on mount', () => {
     const { wrapper } = mountReader()
 
     expect(wrapper.get('[data-passage]').text()).toBe('The galaxy is vast.\nOur cosmos changes.')
     expect(wrapper.findAll('[data-entry-id]').map(button => button.text())).toEqual(['galaxy', 'cosmos'])
     expect(wrapper.findAll('[data-entry-id]').map(button => button.attributes('type'))).toEqual(['button', 'button'])
+    expect(wrapper.emitted('exposed')).toBeUndefined()
+  })
+
+  it('emits unique target exposure only once after explicit input completion', async () => {
+    const { wrapper } = mountReader()
+    const completeButton = wrapper.get('button[aria-label="完成语境输入"]')
+
+    expect(completeButton.text()).toBe('完成语境输入')
+    await completeButton.trigger('click')
+    await completeButton.trigger('click')
+
     expect(wrapper.emitted('exposed')).toEqual([[[galaxyId, cosmosId]]])
+  })
+
+  it('allows explicit input completion again when the lesson changes', async () => {
+    const { wrapper } = mountReader()
+
+    await wrapper.get('button[aria-label="完成语境输入"]').trigger('click')
+    await wrapper.setProps({
+      lesson: {
+        ...lesson,
+        id: 'reading-space-2',
+        targetEntryIds: [cosmosId, cosmosId],
+      },
+    })
+    expect(wrapper.emitted('exposed')).toEqual([[[galaxyId, cosmosId]]])
+
+    const completeButton = wrapper.get('button[aria-label="完成语境输入"]')
+    expect(completeButton.attributes('disabled')).toBeUndefined()
+    await completeButton.trigger('click')
+    expect(wrapper.emitted('exposed')).toEqual([[[galaxyId, cosmosId]], [[cosmosId]]])
   })
 
   it('opens a fully resolved selected card without revealing the translation by default', async () => {
