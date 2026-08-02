@@ -45,14 +45,25 @@ function validateTaskEntryIds(
 
 function validateWordCard(
   card: WordCard,
-  entryId: EntryId,
+  key: string,
   renderedLessonText: string[],
   issues: ValidationIssue[],
 ) {
-  const path = `wordCards.${entryId}`
+  const path = `wordCards.${key}`
 
   if (card.collocations.length < 2 || card.collocations.length > 4)
     addIssue(issues, 'invalid-collocation-count', `${path}.collocations`, 'Word cards must have between two and four collocations')
+
+  if (isEmpty(card.ipa))
+    addIssue(issues, 'empty-required-text', `${path}.ipa`, 'IPA must not be empty')
+
+  if (isEmpty(card.meaning))
+    addIssue(issues, 'empty-required-text', `${path}.meaning`, 'Meaning must not be empty')
+
+  card.collocations.forEach((collocation, index) => {
+    if (isEmpty(collocation))
+      addIssue(issues, 'empty-required-text', `${path}.collocations.${index}`, 'Collocation must not be empty')
+  })
 
   if (isEmpty(card.example.text))
     addIssue(issues, 'empty-required-text', `${path}.example.text`, 'Example text must not be empty')
@@ -70,6 +81,7 @@ export function validateTopicContent(content: TopicContent, topic: CanonicalTopi
   const issues: ValidationIssue[] = []
   const canonicalEntryIds = new Set(topic.entries.map(entry => entry.id))
   const annotatedLessonIndexes = new Map<EntryId, Set<number>>()
+  const semanticWordCards = new Map<EntryId, WordCard[]>()
   const renderedLessonText: string[] = []
 
   content.lessons.forEach((lesson, lessonIndex) => {
@@ -147,16 +159,46 @@ export function validateTopicContent(content: TopicContent, topic: CanonicalTopi
   })
 
   Object.entries(content.wordCards).forEach(([key, card]) => {
-    const entryId = card.entryId
-    if (!validateEntryId(entryId, `wordCards.${key}.entryId`, canonicalEntryIds, issues))
-      return
+    if (!canonicalEntryIds.has(key as EntryId)) {
+      addIssue(
+        issues,
+        'unknown-word-card-key',
+        `wordCards.${key}`,
+        'Word card key is not part of the canonical topic',
+      )
+    }
 
-    validateWordCard(card, entryId, renderedLessonText, issues)
+    const entryId = card.entryId
+    if (key !== entryId) {
+      addIssue(
+        issues,
+        'word-card-entry-id-mismatch',
+        `wordCards.${key}.entryId`,
+        'Word card key must match its entryId',
+      )
+    }
+
+    if (validateEntryId(entryId, `wordCards.${key}.entryId`, canonicalEntryIds, issues)) {
+      const cards = semanticWordCards.get(entryId) ?? []
+      if (cards.length) {
+        addIssue(
+          issues,
+          'duplicate-word-card-entry-id',
+          `wordCards.${key}.entryId`,
+          'Word card entryId values must be unique',
+        )
+      }
+      cards.push(card)
+      semanticWordCards.set(entryId, cards)
+    }
+
+    validateWordCard(card, key, renderedLessonText, issues)
   })
 
   canonicalEntryIds.forEach((entryId) => {
-    const card = content.wordCards[entryId]
-    if (!card)
+    const cards = semanticWordCards.get(entryId) ?? []
+    const card = cards[0]
+    if (!cards.length)
       addIssue(issues, 'missing-word-card', `wordCards.${entryId}`, 'Canonical entry must have a word card')
 
     const lessonIndexes = annotatedLessonIndexes.get(entryId)

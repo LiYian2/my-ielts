@@ -137,16 +137,68 @@ describe('topic content validator', () => {
     ])
   })
 
-  it('reports an unknown word card entry ID', () => {
+  it('reports an unknown word card key and entry ID', () => {
     const content = createContent()
     const unknownEntryId = '04-space-exploration:nebula' as EntryId
-    content.wordCards[unknownEntryId] = createCard(unknownEntryId, 'A nebula is visible.')
+    content.wordCards[unknownEntryId] = createCard(unknownEntryId, 'A galaxy is observed through a telescope.')
 
     expect(validateTopicContent(content, topic)).toEqual([
+      {
+        code: 'unknown-word-card-key',
+        path: `wordCards.${unknownEntryId}`,
+        message: 'Word card key is not part of the canonical topic',
+      },
       {
         code: 'unknown-entry-id',
         path: `wordCards.${unknownEntryId}.entryId`,
         message: 'Entry ID is not part of the canonical topic',
+      },
+    ])
+  })
+
+  it('reports a word card whose key does not match its internal entry ID', () => {
+    const content = createContent()
+    const mismatchedEntryId = '04-space-exploration:galaxy-alias' as EntryId
+    content.wordCards[galaxy].entryId = mismatchedEntryId
+
+    expect(validateTopicContent(content, topic)).toEqual([
+      {
+        code: 'word-card-entry-id-mismatch',
+        path: `wordCards.${galaxy}.entryId`,
+        message: 'Word card key must match its entryId',
+      },
+      {
+        code: 'unknown-entry-id',
+        path: `wordCards.${galaxy}.entryId`,
+        message: 'Entry ID is not part of the canonical topic',
+      },
+      {
+        code: 'missing-word-card',
+        path: `wordCards.${galaxy}`,
+        message: 'Canonical entry must have a word card',
+      },
+    ])
+  })
+
+  it('reports duplicate semantic word card entry IDs', () => {
+    const content = createContent()
+    content.wordCards[galaxy].entryId = telescope
+
+    expect(validateTopicContent(content, topic)).toEqual([
+      {
+        code: 'word-card-entry-id-mismatch',
+        path: `wordCards.${galaxy}.entryId`,
+        message: 'Word card key must match its entryId',
+      },
+      {
+        code: 'duplicate-word-card-entry-id',
+        path: `wordCards.${telescope}.entryId`,
+        message: 'Word card entryId values must be unique',
+      },
+      {
+        code: 'missing-word-card',
+        path: `wordCards.${galaxy}`,
+        message: 'Canonical entry must have a word card',
       },
     ])
   })
@@ -173,6 +225,31 @@ describe('topic content validator', () => {
         code: 'invalid-collocation-count',
         path: `wordCards.${galaxy}.collocations`,
         message: 'Word cards must have between two and four collocations',
+      },
+    ])
+  })
+
+  it('reports whitespace-only IPA, meaning, and individual collocations', () => {
+    const content = createContent()
+    content.wordCards[galaxy].ipa = ' '
+    content.wordCards[galaxy].meaning = '\t'
+    content.wordCards[galaxy].collocations[1] = '\n'
+
+    expect(validateTopicContent(content, topic)).toEqual([
+      {
+        code: 'empty-required-text',
+        path: `wordCards.${galaxy}.ipa`,
+        message: 'IPA must not be empty',
+      },
+      {
+        code: 'empty-required-text',
+        path: `wordCards.${galaxy}.meaning`,
+        message: 'Meaning must not be empty',
+      },
+      {
+        code: 'empty-required-text',
+        path: `wordCards.${galaxy}.collocations.1`,
+        message: 'Collocation must not be empty',
       },
     ])
   })
