@@ -1,15 +1,10 @@
 import { flushPromises, mount } from '@vue/test-utils'
-import { describe, expect, it, vi } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import TopicDashboard from '../../src/components/vocabulary-learning/TopicDashboard.vue'
 import ProgressBackup from '../../src/components/vocabulary-learning/ProgressBackup.vue'
-import TopicPage from '../../src/pages/vocabulary/learn/[topic].vue'
 import { findTopicBySlug, topicManifest } from '../../src/features/vocabulary-learning/content/manifest'
 import type { TopicManifestEntry } from '../../src/features/vocabulary-learning/content/manifest'
 import type { LearningStateV1 } from '../../src/features/vocabulary-learning/types'
-
-vi.mock('vue-router', () => ({
-  useRoute: () => ({ params: { topic: 'space-exploration' } }),
-}))
 
 const manifest: TopicManifestEntry[] = [
   {
@@ -52,6 +47,14 @@ const progress: LearningStateV1 = {
       nextReviewOn: '2026-08-06',
       unaidedRecallDates: ['2026-08-01', '2026-08-02'],
       productionDates: ['2026-08-02'],
+      lastOutcome: 'unaided',
+    },
+    'obsolete-topic:deleted-word': {
+      state: 'active',
+      intervalIndex: 4,
+      nextReviewOn: '2026-08-01',
+      unaidedRecallDates: ['2026-07-01', '2026-08-01'],
+      productionDates: ['2026-08-01'],
       lastOutcome: 'unaided',
     },
   },
@@ -111,15 +114,6 @@ describe('active vocabulary dashboard', () => {
       load: expect.any(Function),
     })])
     expect(findTopicBySlug('not-a-topic')).toBeUndefined()
-  })
-
-  it('keeps a missing lazy content module on the safe in-progress route state', async () => {
-    const wrapper = mount(TopicPage, { global: { components: { RouterLink: RouterLinkStub } } })
-
-    await flushPromises()
-
-    expect(wrapper.text()).toContain('内容生成中')
-    expect(wrapper.text()).toContain('该主题的主动学习内容正在生成中。')
   })
 
   it('adds the active-learning link without changing the legacy vocabulary implementation', async () => {

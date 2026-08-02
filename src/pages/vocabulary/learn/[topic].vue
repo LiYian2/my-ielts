@@ -6,29 +6,38 @@ const route = useRoute()
 const content = shallowRef<TopicContent | null>(null)
 const isLoading = ref(false)
 const unavailableMessage = ref<string | null>(null)
+let latestRequest = 0
 
 watch(
   () => route.params.topic,
   async (routeTopic) => {
+    const request = ++latestRequest
     const slug = typeof routeTopic === 'string' ? routeTopic : ''
     const topic = findTopicBySlug(slug)
     content.value = null
     unavailableMessage.value = null
+    isLoading.value = true
 
     if (!topic || !topic.available || !topic.load) {
       unavailableMessage.value = '该主题的主动学习内容正在生成中。'
+      isLoading.value = false
       return
     }
 
-    isLoading.value = true
     try {
-      content.value = (await topic.load()).default
+      const loadedContent = (await topic.load()).default
+      if (request !== latestRequest)
+        return
+      content.value = loadedContent
     }
     catch {
+      if (request !== latestRequest)
+        return
       unavailableMessage.value = '该主题的主动学习内容正在生成中。'
     }
     finally {
-      isLoading.value = false
+      if (request === latestRequest)
+        isLoading.value = false
     }
   },
   { immediate: true },
