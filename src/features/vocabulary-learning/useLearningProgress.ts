@@ -3,8 +3,8 @@ import { createWordProgress, recordExposure, recordProduction, recordReview } fr
 import {
   createLearningState,
   exportLearningState,
-  importLearningState,
   loadLearningState,
+  parseLearningState,
   resetLearningState,
   saveLearningState,
 } from './storage'
@@ -18,11 +18,22 @@ export interface LearningProgressOptions {
 export function useLearningProgress(options: LearningProgressOptions = {}) {
   const now = options.now ?? (() => new Date())
   const storage = options.storage ?? browserStorage()
-  const state = ref(storage ? loadLearningState(storage, now()) : createLearningState()) as Ref<LearningStateV1>
+  const persistenceError = ref<string | null>(null)
+  const state = ref(loadInitialState(storage, now, persistenceError)) as Ref<LearningStateV1>
 
   function persist(): void {
-    if (storage)
+    if (!storage) {
+      persistenceError.value = 'Learning progress storage is unavailable'
+      return
+    }
+
+    try {
       saveLearningState(storage, state.value)
+      persistenceError.value = null
+    }
+    catch (error) {
+      persistenceError.value = storageErrorMessage(error)
+    }
   }
 
   function recordWordExposure(entryId: EntryId, date = now()): void {
@@ -62,7 +73,9 @@ export function useLearningProgress(options: LearningProgressOptions = {}) {
   }
 
   function importProgress(json: string): void {
-    state.value = requiredStorage().importState(json)
+    const imported = parseLearningState(json)
+    state.value = imported
+    persist()
   }
 
   function exportProgress(): string {
@@ -70,7 +83,19 @@ export function useLearningProgress(options: LearningProgressOptions = {}) {
   }
 
   function resetProgress(): void {
-    state.value = requiredStorage().resetState()
+    state.value = createLearningState()
+    if (!storage) {
+      persistenceError.value = 'Learning progress storage is unavailable'
+      return
+    }
+
+    try {
+      resetLearningState(storage)
+      persistenceError.value = null
+    }
+    catch (error) {
+      persistenceError.value = storageErrorMessage(error)
+    }
   }
 
   function replaceWord(entryId: EntryId, transition: (progress: ReturnType<typeof createWordProgress>) => ReturnType<typeof createWordProgress>): void {
@@ -85,18 +110,9 @@ export function useLearningProgress(options: LearningProgressOptions = {}) {
     persist()
   }
 
-  function requiredStorage() {
-    if (!storage)
-      throw new Error('Learning progress storage is unavailable')
-
-    return {
-      importState: (json: string) => importLearningState(storage, json),
-      resetState: () => resetLearningState(storage),
-    }
-  }
-
   return {
     state,
+    persistenceError,
     recordWordExposure,
     recordWordReview,
     recordWordProduction,
@@ -106,6 +122,25 @@ export function useLearningProgress(options: LearningProgressOptions = {}) {
     exportProgress,
     resetProgress,
   }
+}
+
+function loadInitialState(storage: Storage | undefined, now: () => Date, persistenceError: Ref<string | null>): LearningStateV1 {
+  if (!storage) {
+    persistenceError.value = 'Learning progress storage is unavailable'
+    return createLearningState()
+  }
+
+  try {
+    return loadLearningState(storage, now())
+  }
+  catch (error) {
+    persistenceError.value = storageErrorMessage(error)
+    return createLearningState()
+  }
+}
+
+function storageErrorMessage(error: unknown): string {
+  return error instanceof Error ? error.message : 'Learning progress storage is unavailable'
 }
 
 function browserStorage(): Storage | undefined {

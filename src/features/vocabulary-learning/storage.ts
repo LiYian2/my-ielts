@@ -1,4 +1,5 @@
 import type { EntryId, LearningStateV1, MasteryState, ReviewOutcome, SavedAnswer, WordProgress } from './types'
+import { REVIEW_INTERVAL_DAYS } from './review'
 
 export const LEARNING_STORAGE_KEY = 'my-ielts:vocabulary-learning:v1'
 export const RECOVERY_STORAGE_KEY_PREFIX = 'my-ielts:vocabulary-learning:recovery:'
@@ -26,7 +27,7 @@ export function loadLearningState(storage: Storage, now = new Date()): LearningS
     return parseLearningState(raw)
   }
   catch {
-    storage.setItem(`${RECOVERY_STORAGE_KEY_PREFIX}${now.toISOString()}`, raw)
+    recoverInvalidState(storage, raw, now)
     return createLearningState()
   }
 }
@@ -50,7 +51,7 @@ export function resetLearningState(storage: Storage): LearningStateV1 {
   return createLearningState()
 }
 
-function parseLearningState(json: string): LearningStateV1 {
+export function parseLearningState(json: string): LearningStateV1 {
   try {
     return validateLearningState(JSON.parse(json))
   }
@@ -104,7 +105,7 @@ function validateWordProgress(value: unknown): WordProgress {
     || (value.lastOutcome !== null && !REVIEW_OUTCOMES.includes(value.lastOutcome as ReviewOutcome)))
     throw new Error('Invalid learning progress import')
 
-  return {
+  const progress: WordProgress = {
     state: value.state as MasteryState,
     intervalIndex: value.intervalIndex,
     nextReviewOn: value.nextReviewOn,
@@ -112,6 +113,10 @@ function validateWordProgress(value: unknown): WordProgress {
     productionDates: [...value.productionDates],
     lastOutcome: value.lastOutcome as ReviewOutcome | null,
   }
+  if (!isSemanticallyValidWordProgress(progress))
+    throw new Error('Invalid learning progress import')
+
+  return progress
 }
 
 function validateSavedAnswer(value: unknown, taskId: string): SavedAnswer {
@@ -154,7 +159,10 @@ function isDistinctDateKeyArray(value: unknown): value is string[] {
 }
 
 function isReviewIntervalIndex(value: unknown): value is number {
-  return typeof value === 'number' && Number.isInteger(value) && value >= 0 && value <= 4
+  return typeof value === 'number'
+    && Number.isInteger(value)
+    && value >= 0
+    && value < REVIEW_INTERVAL_DAYS.length
 }
 
 function isBooleanRecord(value: unknown): value is Record<string, boolean> {
@@ -162,5 +170,59 @@ function isBooleanRecord(value: unknown): value is Record<string, boolean> {
 }
 
 function isDateTime(value: unknown): value is string {
-  return typeof value === 'string' && !Number.isNaN(Date.parse(value))
+  if (typeof value !== 'string')
+    return false
+
+  const date = new Date(value)
+  return !Number.isNaN(date.valueOf()) && date.toISOString() === value
+}
+
+function isSemanticallyValidWordProgress(progress: WordProgress): boolean {
+  const unaidedCount = progress.unaidedRecallDates.length
+  const hasProduction = progress.productionDates.length > 0
+
+  if (progress.state === 'recallable' && unaidedCount === 0)
+    return false
+  if (progress.state === 'active' && (unaidedCount < 2 || !hasProduction))
+    return false
+  if ((progress.state === 'unseen' || progress.state === 'understood') && unaidedCount > 0)
+    return false
+  if (progress.state === 'recallable' && unaidedCount >= 2 && hasProduction)
+    return false
+  if ((progress.nextReviewOn === null) !== (progress.lastOutcome === null))
+    return false
+  if (progress.lastOutcome === 'failed' && progress.intervalIndex !== 0)
+    return false
+  if (progress.lastOutcome === 'unaided') {
+    const lastUnaidedDate = progress.unaidedRecallDates.at(-1)
+    if (!lastUnaidedDate || progress.nextReviewOn === null)
+      return false
+    if (progress.nextReviewOn !== addCalendarDays(lastUnaidedDate, REVIEW_INTERVAL_DAYS[progress.intervalIndex]))
+      return false
+  }
+
+  return true
+}
+
+function addCalendarDays(dateKey: string, days: number): string {
+  const [year, month, day] = dateKey.split('-').map(Number)
+  const date = new Date(year, month - 1, day + days)
+  return [date.getFullYear(), String(date.getMonth() + 1).padStart(2, '0'), String(date.getDate()).padStart(2, '0')].join('-')
+}
+
+function recoverInvalidState(storage: Storage, raw: string, now: Date): void {
+  try {
+    const baseKey = `${RECOVERY_STORAGE_KEY_PREFIX}${now.toISOString()}`
+    let recoveryKey = baseKey
+    let suffix = 1
+    while (storage.getItem(recoveryKey) !== null) {
+      recoveryKey = `${baseKey}:${suffix}`
+      suffix += 1
+    }
+    storage.setItem(recoveryKey, raw)
+    storage.removeItem(LEARNING_STORAGE_KEY)
+  }
+  catch {
+    // The active value remains untouched unless its recovery copy was written first.
+  }
 }
