@@ -83,6 +83,17 @@ describe('vocabulary review scheduling', () => {
     })
   })
 
+  it('makes production-first progress active after unaided recalls on two distinct dates', () => {
+    const produced = recordProduction(createWordProgress(), new Date(2026, 7, 2, 9))
+    const firstRecall = recordReview(produced, 'unaided', new Date(2026, 7, 2, 10))
+
+    expect(recordReview(firstRecall, 'unaided', new Date(2026, 7, 3, 10))).toMatchObject({
+      state: 'active',
+      unaidedRecallDates: ['2026-08-02', '2026-08-03'],
+      productionDates: ['2026-08-02'],
+    })
+  })
+
   it('retains active mastery after a later failure while resetting review timing', () => {
     const firstRecall = recordReview(createWordProgress(), 'unaided', new Date(2026, 7, 2, 10))
     const active = recordProduction(
@@ -95,6 +106,21 @@ describe('vocabulary review scheduling', () => {
       intervalIndex: 0,
       nextReviewOn: '2026-08-07',
       lastOutcome: 'failed',
+    })
+  })
+
+  it('retains active mastery and its interval after a prompted review', () => {
+    const firstRecall = recordReview(createWordProgress(), 'unaided', new Date(2026, 7, 2, 10))
+    const active = recordProduction(
+      recordReview(firstRecall, 'unaided', new Date(2026, 7, 3, 10)),
+      new Date(2026, 7, 3, 16),
+    )
+
+    expect(recordReview(active, 'prompted', new Date(2026, 7, 6, 10))).toMatchObject({
+      state: 'active',
+      intervalIndex: 1,
+      nextReviewOn: '2026-08-07',
+      lastOutcome: 'prompted',
     })
   })
 
@@ -151,5 +177,17 @@ describe('vocabulary review scheduling', () => {
     expect(isDue(progress, localMidnight)).toBe(true)
     expect(isDue(progress, new Date(2026, 7, 1, 23, 59))).toBe(false)
     expect(dstBoundaryReview.nextReviewOn).toBe('2026-03-09')
+  })
+
+  it('schedules across a local calendar year boundary', () => {
+    expect(recordReview(createWordProgress(), 'unaided', new Date(2026, 11, 31, 10))).toMatchObject({
+      nextReviewOn: '2027-01-01',
+    })
+  })
+
+  it('schedules onto leap day using local calendar arithmetic', () => {
+    expect(recordReview(createWordProgress(), 'unaided', new Date(2028, 1, 28, 10))).toMatchObject({
+      nextReviewOn: '2028-02-29',
+    })
   })
 })
