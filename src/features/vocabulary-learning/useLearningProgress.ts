@@ -1,5 +1,5 @@
 import { type Ref, ref } from 'vue'
-import { createWordProgress, recordExposure, recordProduction, recordReview } from './review'
+import { createWordProgress, localDateKey, recordExposure, recordProduction, recordReview } from './review'
 import {
   type LearningStateLoadResult,
   createLearningState,
@@ -48,6 +48,29 @@ export function useLearningProgress(options: LearningProgressOptions = {}) {
 
   function recordWordReview(entryId: EntryId, outcome: ReviewOutcome, date = now()): void {
     replaceWord(entryId, progress => recordReview(progress, outcome, date))
+  }
+
+  function recordRecallExercise(exerciseId: string, entryId: EntryId, outcome: ReviewOutcome, date = now()): void {
+    if (state.value.recalls?.[exerciseId])
+      return
+
+    const progress = state.value.words[entryId] ?? createWordProgress()
+    state.value = {
+      ...state.value,
+      words: {
+        ...state.value.words,
+        [entryId]: recordReview(progress, outcome, date),
+      },
+      recalls: {
+        ...state.value.recalls,
+        [exerciseId]: {
+          entryId,
+          outcome,
+          completedOn: localDateKey(date),
+        },
+      },
+    }
+    persist()
   }
 
   function recordWordProduction(entryId: EntryId, date = now()): void {
@@ -139,6 +162,7 @@ export function useLearningProgress(options: LearningProgressOptions = {}) {
     persistenceError,
     recordWordExposure,
     recordWordReview,
+    recordRecallExercise,
     recordWordProduction,
     saveAnswer,
     completeLesson,

@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import LessonReader from '../../../components/vocabulary-learning/LessonReader.vue'
+import DelayedReviewStage from '../../../components/vocabulary-learning/DelayedReviewStage.vue'
 import ProductionStage from '../../../components/vocabulary-learning/ProductionStage.vue'
 import RecallStage from '../../../components/vocabulary-learning/RecallStage.vue'
 import { getCanonicalTopic } from '../../../features/vocabulary-learning/canonical'
 import { findTopicBySlug } from '../../../features/vocabulary-learning/content/manifest'
 import { isDue, localDateKey } from '../../../features/vocabulary-learning/review'
 import { useLearningProgress } from '../../../features/vocabulary-learning/useLearningProgress'
-import type { EntryId, Lesson, MasteryState, ProductionTask, ReviewOutcome, SavedAnswer, TopicContent } from '../../../features/vocabulary-learning/types'
+import type { DelayedReviewItem, DelayedReviewMode, EntryId, Lesson, MasteryState, ProductionTask, ReviewOutcome, SavedAnswer, TopicContent } from '../../../features/vocabulary-learning/types'
 
 type StageId = 'warmup' | 'input' | 'recall' | 'production' | 'review'
 
@@ -37,15 +38,18 @@ const masteryLabels: Array<{ state: MasteryState; label: string }> = [
   { state: 'active', label: '可主动使用' },
 ]
 const selfAssessmentDimensions = ['meaning', 'collocation', 'grammar', 'register', 'relevance'] as const
+const delayedReviewModes: DelayedReviewMode[] = ['meaning', 'cloze', 'collocation', 'production']
 
 const route = useRoute()
 const learningProgress = useLearningProgress()
 const content = shallowRef<TopicContent | null>(null)
+const canonicalSourceTopicId = ref<string | null>(null)
 const isLoading = ref(false)
 const unavailableMessage = ref<string | null>(null)
 const currentLessonIndex = ref(0)
 const currentStage = ref<StageId>('warmup')
 const currentDateKey = ref(localDateKey(new Date()))
+const warmupDrafts = ref<Record<string, string>>({})
 const exposedLessonIds = new Set<string>()
 const reviewedExerciseIds = new Set<string>()
 const recordedProductionTaskIds = new Set<string>()
@@ -53,11 +57,30 @@ let latestRequest = 0
 let midnightTimer: ReturnType<typeof setTimeout> | undefined
 
 const currentLesson = computed<Lesson | null>(() => content.value?.lessons?.[currentLessonIndex.value] ?? null)
-const canonicalTopic = computed(() => content.value?.topicId ? getCanonicalTopic(content.value.topicId) : null)
+const canonicalTopic = computed(() => canonicalSourceTopicId.value ? getCanonicalTopic(canonicalSourceTopicId.value) : null)
 const completedLessonIds = computed(() => new Set(learningProgress.state.value.completedLessons))
 const completedLessonsCount = computed(() => content.value?.lessons.filter(lesson => completedLessonIds.value.has(lesson.id)).length ?? 0)
 const allLessonsComplete = computed(() => Boolean(content.value?.lessons.length) && completedLessonsCount.value === content.value!.lessons.length)
 const isCurrentLessonComplete = computed(() => currentLesson.value ? completedLessonIds.value.has(currentLesson.value.id) : false)
+const currentWarmupTaskId = computed(() => currentLesson.value ? `warmup:${currentLesson.value.id}` : null)
+const currentWarmupDraft = computed({
+  get: () => {
+    const taskId = currentWarmupTaskId.value
+    if (!taskId)
+      return ''
+    return warmupDrafts.value[taskId] ?? learningProgress.state.value.answers[taskId]?.text ?? ''
+  },
+  set: (value: string) => {
+    const taskId = currentWarmupTaskId.value
+    if (taskId)
+      warmupDrafts.value = { ...warmupDrafts.value, [taskId]: value }
+  },
+})
+const isWarmupComplete = computed(() => {
+  const lesson = currentLesson.value
+  const taskId = currentWarmupTaskId.value
+  return Boolean(lesson && (completedLessonIds.value.has(lesson.id) || (taskId && learningProgress.state.value.answers[taskId]?.text.trim())))
+})
 const isInputComplete = computed(() => currentLesson.value?.targetEntryIds.every((entryId) => {
   const progress = learningProgress.state.value.words[entryId]
   return progress !== undefined && progress.state !== 'unseen'
@@ -79,6 +102,16 @@ const topicStats = computed<TopicStats>(() => {
   }
   return stats
 })
+const dueReviewItems = computed<DelayedReviewItem[]>(() => {
+  const now = new Date(`${currentDateKey.value}T12:00:00`)
+  return (canonicalTopic.value?.entries ?? []).flatMap((entry, index) => {
+    const progress = learningProgress.state.value.words[entry.id]
+    const card = content.value?.wordCards[entry.id]
+    if (!progress || !card || !isDue(progress, now))
+      return []
+    return [{ entry, card, mode: delayedReviewModes[index % delayedReviewModes.length]! }]
+  })
+})
 
 function selectStage(stage: StageId): void {
   if (!isStageUnlocked(stage))
@@ -87,8 +120,10 @@ function selectStage(stage: StageId): void {
 }
 
 function isStageUnlocked(stage: StageId): boolean {
-  if (stage === 'warmup' || stage === 'input')
+  if (stage === 'warmup')
     return true
+  if (stage === 'input')
+    return isWarmupComplete.value
 
   const lesson = currentLesson.value
   if (!lesson)
@@ -97,10 +132,14 @@ function isStageUnlocked(stage: StageId): boolean {
     return isInputComplete.value
   if (stage === 'production')
     return isRecallComplete(lesson)
-  return isProductionComplete(lesson) || completedLessonIds.value.has(lesson.id)
+  return topicStats.value.due > 0 || isProductionComplete(lesson) || completedLessonIds.value.has(lesson.id)
 }
 
 function stageStatus(): string {
+  if (currentStage.value === 'review' && topicStats.value.due > 0)
+    return `今天有 ${topicStats.value.due} 个词需要延迟复习。`
+  if (!isWarmupComplete.value)
+    return '先写下预热回答，建立自己的表达基线，再进入语境输入。'
   if (!currentLesson.value || isStageUnlocked(currentStage.value)) {
     if (!isInputComplete.value)
       return '完成语境输入后解锁主动回忆。'
@@ -111,6 +150,22 @@ function stageStatus(): string {
     return '本课所有阶段均可回访。'
   }
   return '完成前置学习阶段后即可继续。'
+}
+
+function completeWarmup(): void {
+  const taskId = currentWarmupTaskId.value
+  const text = currentWarmupDraft.value.trim()
+  if (!taskId || !text)
+    return
+  learningProgress.saveAnswer({ taskId, text, selfAssessment: {}, updatedAt: new Date().toISOString() })
+  currentStage.value = 'input'
+}
+
+function recordDelayedReview(event: { entryId: EntryId; outcome: ReviewOutcome }): void {
+  const progress = learningProgress.state.value.words[event.entryId]
+  if (!progress || !isDue(progress, new Date(`${currentDateKey.value}T12:00:00`)))
+    return
+  learningProgress.recordWordReview(event.entryId, event.outcome)
 }
 
 function navigateLesson(offset: number): void {
@@ -140,17 +195,17 @@ function recordExposure(entryIds: EntryId[]): void {
     currentStage.value = 'recall'
 }
 
-function recordReview(event: { entryId: EntryId; outcome: ReviewOutcome }): void {
+function recordReview(event: { exerciseId: string; entryId: EntryId; outcome: ReviewOutcome }): void {
   const lesson = currentLesson.value
   if (!lesson)
     return
 
-  const exercise = lesson.recallExercises.find(candidate => candidate.entryId === event.entryId)
+  const exercise = lesson.recallExercises.find(candidate => candidate.id === event.exerciseId && candidate.entryId === event.entryId)
   if (!exercise || reviewedExerciseIds.has(exercise.id))
     return
 
   reviewedExerciseIds.add(exercise.id)
-  learningProgress.recordWordReview(event.entryId, event.outcome)
+  learningProgress.recordRecallExercise(exercise.id, event.entryId, event.outcome)
   if (isRecallComplete(lesson))
     currentStage.value = 'production'
   completeLessonWhenReady(lesson)
@@ -189,7 +244,12 @@ function isSubmittedProductionTask(task: ProductionTask): boolean {
 }
 
 function isRecallComplete(lesson: Lesson): boolean {
-  return lesson.recallExercises.every(exercise => learningProgress.state.value.words[exercise.entryId]?.lastOutcome != null)
+  if (completedLessonIds.value.has(lesson.id))
+    return true
+  return lesson.recallExercises.every((exercise) => {
+    const record = learningProgress.state.value.recalls?.[exercise.id]
+    return record?.entryId === exercise.entryId
+  })
 }
 
 function isProductionComplete(lesson: Lesson): boolean {
@@ -239,10 +299,12 @@ watch(
     const slug = typeof routeTopic === 'string' ? routeTopic : ''
     const topic = findTopicBySlug(slug)
     content.value = null
+    canonicalSourceTopicId.value = null
     unavailableMessage.value = null
     currentLessonIndex.value = 0
     currentStage.value = 'warmup'
     clearPageLocalProgress()
+    warmupDrafts.value = {}
     isLoading.value = true
 
     if (!topic || !topic.available || !topic.load) {
@@ -255,6 +317,7 @@ watch(
       const loadedContent = (await topic.load()).default
       if (request !== latestRequest)
         return
+      canonicalSourceTopicId.value = topic.sourceTopicId
       content.value = loadedContent
       reconcileCompletedLessons(loadedContent)
     }
@@ -366,20 +429,20 @@ watch(
           {{ currentLesson.warmupPrompt }}
         </p>
         <p class="mt-2 text-sm text-gray-600 dark:text-gray-300">
-          先用自己已有的语言回答；这一阶段不计入完成度。
+          先用自己已有的语言回答。保存后再读语料，便于比较输入前后的表达变化。
         </p>
+        <label class="mt-4 block text-sm font-medium text-gray-800 dark:text-gray-100">
+          输入前，我会这样回答
+          <textarea v-model="currentWarmupDraft" data-warmup-answer rows="4" class="mt-2 w-full border border-gray-300 rounded px-3 py-2 dark:border-gray-600 dark:bg-gray-900" />
+        </label>
+        <button data-action="complete-warmup" type="button" class="mt-3 rounded bg-blue-700 px-4 py-2 text-sm text-white disabled:cursor-not-allowed disabled:opacity-60" :disabled="!currentWarmupDraft.trim()" @click="completeWarmup">
+          {{ isWarmupComplete ? '更新预热回答并继续' : '保存预热回答并继续' }}
+        </button>
       </section>
       <LessonReader v-else-if="currentStage === 'input'" :lesson="currentLesson" :topic="canonicalTopic" :word-cards="content.wordCards" @exposed="recordExposure" />
       <RecallStage v-else-if="currentStage === 'recall'" :exercises="currentLesson.recallExercises" @reviewed="recordReview" />
       <ProductionStage v-else-if="currentStage === 'production'" :tasks="currentLesson.productionTasks" :answers="learningProgress.state.value.answers" :required-words="requiredWords" @answer-saved="saveAnswer" @production-recorded="recordProduction" />
-      <section v-else class="rounded-lg bg-white p-5 shadow-sm dark:bg-gray-800">
-        <h2 class="text-xl font-semibold text-gray-900 dark:text-white">
-          延迟复习
-        </h2>
-        <p class="mt-2 text-sm text-gray-600 dark:text-gray-300">
-          已提交的回忆会按间隔进入本地复习队列；今日待复习 {{ topicStats.due }} 个。
-        </p>
-      </section>
+      <DelayedReviewStage v-else :items="dueReviewItems" @reviewed="recordDelayedReview" />
 
       <section class="rounded-lg bg-white p-5 shadow-sm dark:bg-gray-800">
         <h2 class="text-xl font-semibold text-gray-900 dark:text-white">

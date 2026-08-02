@@ -95,7 +95,7 @@ function completeExercise(exercise: RecallExercise, state: ExerciseState, outcom
 
   state.outcome = outcome
   state.feedback = feedback
-  emit('reviewed', { entryId: exercise.entryId, outcome })
+  emit('reviewed', { exerciseId: exercise.id, entryId: exercise.entryId, outcome })
 }
 
 function goTo(index: number): void {

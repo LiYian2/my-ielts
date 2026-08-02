@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { getCanonicalTopic } from '../../features/vocabulary-learning/canonical'
-import { isDue } from '../../features/vocabulary-learning/review'
+import { isDue, localDateKey } from '../../features/vocabulary-learning/review'
 import type { TopicManifestEntry } from '../../features/vocabulary-learning/content/manifest'
 import type { CanonicalEntry, LearningStateV1, MasteryState } from '../../features/vocabulary-learning/types'
 
@@ -18,6 +18,9 @@ const props = defineProps<{
   now?: Date
 }>()
 
+const currentDateKey = ref(localDateKey(new Date()))
+let midnightTimer: ReturnType<typeof setTimeout> | undefined
+
 const masteryLabels: Array<{ state: MasteryState; label: string }> = [
   { state: 'unseen', label: '未接触' },
   { state: 'understood', label: '已理解' },
@@ -29,11 +32,33 @@ const availableEntries = computed(() => props.manifest
   .filter(topic => topic.available)
   .flatMap(topic => getCanonicalTopic(topic.sourceTopicId).entries))
 
-const summary = computed(() => progressSummary(availableEntries.value, props.progress, props.now ?? new Date()))
+const currentNow = computed(() => props.now ?? new Date(`${currentDateKey.value}T12:00:00`))
+
+const summary = computed(() => progressSummary(availableEntries.value, props.progress, currentNow.value))
 
 function topicSummary(topic: TopicManifestEntry): ProgressSummary {
-  return progressSummary(getCanonicalTopic(topic.sourceTopicId).entries, props.progress, props.now ?? new Date())
+  return progressSummary(getCanonicalTopic(topic.sourceTopicId).entries, props.progress, currentNow.value)
 }
+
+function scheduleMidnightRefresh(): void {
+  const now = new Date()
+  const nextMidnight = new Date(now)
+  nextMidnight.setHours(24, 0, 0, 0)
+  midnightTimer = setTimeout(() => {
+    currentDateKey.value = localDateKey(new Date())
+    scheduleMidnightRefresh()
+  }, Math.max(1, nextMidnight.valueOf() - now.valueOf()))
+}
+
+onMounted(() => {
+  if (props.now === undefined)
+    scheduleMidnightRefresh()
+})
+
+onBeforeUnmount(() => {
+  if (midnightTimer !== undefined)
+    clearTimeout(midnightTimer)
+})
 
 function progressSummary(entries: CanonicalEntry[], progress: LearningStateV1, now: Date): ProgressSummary {
   const summary: ProgressSummary = { unseen: 0, understood: 0, recallable: 0, active: 0, due: 0 }

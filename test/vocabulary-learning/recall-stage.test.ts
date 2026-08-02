@@ -36,7 +36,7 @@ describe('progressive recall stage', () => {
     await wrapper.get('input').setValue('  GALAXY\u00A0')
     await wrapper.get('[data-action="submit-answer"]').trigger('click')
 
-    expect(wrapper.emitted('reviewed')).toEqual([[{ entryId: galaxyId, outcome: 'unaided' }]])
+    expect(wrapper.emitted('reviewed')).toEqual([[{ exerciseId: 'galaxy-cloze', entryId: galaxyId, outcome: 'unaided' }]])
   })
 
   it('reveals the first letter before the meaning cue and keeps accepted answers out of the DOM until explicit answer reveal', async () => {
@@ -64,12 +64,12 @@ describe('progressive recall stage', () => {
     await hinted.get('[data-action="submit-answer"]').trigger('click')
     await hinted.get('[data-action="reveal-answer"]').trigger('click')
 
-    expect(hinted.emitted('reviewed')).toEqual([[{ entryId: galaxyId, outcome: 'prompted' }]])
+    expect(hinted.emitted('reviewed')).toEqual([[{ exerciseId: 'galaxy-cloze', entryId: galaxyId, outcome: 'prompted' }]])
 
     const incomplete = mountRecall()
     await incomplete.get('[data-action="reveal-answer"]').trigger('click')
     await incomplete.get('[data-action="reveal-answer"]').trigger('click')
-    expect(incomplete.emitted('reviewed')).toEqual([[{ entryId: galaxyId, outcome: 'failed' }]])
+    expect(incomplete.emitted('reviewed')).toEqual([[{ exerciseId: 'galaxy-cloze', entryId: galaxyId, outcome: 'failed' }]])
   })
 
   it('keeps drafts isolated per exercise and preserves earlier emitted outcomes while advancing', async () => {
@@ -82,12 +82,12 @@ describe('progressive recall stage', () => {
     await wrapper.get('[data-action="previous"]').trigger('click')
 
     expect((wrapper.get('input').element as HTMLInputElement).value).toBe('galaxy')
-    expect(wrapper.emitted('reviewed')).toEqual([[{ entryId: galaxyId, outcome: 'unaided' }]])
+    expect(wrapper.emitted('reviewed')).toEqual([[{ exerciseId: 'galaxy-cloze', entryId: galaxyId, outcome: 'unaided' }]])
     await wrapper.get('[data-action="next"]').trigger('click')
     await wrapper.get('[data-action="submit-answer"]').trigger('click')
     expect(wrapper.emitted('reviewed')).toEqual([
-      [{ entryId: galaxyId, outcome: 'unaided' }],
-      [{ entryId: stationId, outcome: 'unaided' }],
+      [{ exerciseId: 'galaxy-cloze', entryId: galaxyId, outcome: 'unaided' }],
+      [{ exerciseId: 'station-cloze', entryId: stationId, outcome: 'unaided' }],
     ])
   })
 
@@ -98,14 +98,14 @@ describe('progressive recall stage', () => {
     await wrapper.get('input').trigger('keyup.enter')
     await wrapper.get('[data-action="submit-answer"]').trigger('click')
     await wrapper.get('[data-action="reveal-answer"]').trigger('click')
-    expect(wrapper.emitted('reviewed')).toEqual([[{ entryId: galaxyId, outcome: 'unaided' }]])
+    expect(wrapper.emitted('reviewed')).toEqual([[{ exerciseId: 'galaxy-cloze', entryId: galaxyId, outcome: 'unaided' }]])
 
     await wrapper.get('[data-action="next"]').trigger('click')
     await wrapper.get('input').setValue('\u2003SPACE\u202FSTATION\u00A0')
     await wrapper.get('[data-action="submit-answer"]').trigger('click')
     expect(wrapper.emitted('reviewed')).toEqual([
-      [{ entryId: galaxyId, outcome: 'unaided' }],
-      [{ entryId: stationId, outcome: 'unaided' }],
+      [{ exerciseId: 'galaxy-cloze', entryId: galaxyId, outcome: 'unaided' }],
+      [{ exerciseId: 'station-cloze', entryId: stationId, outcome: 'unaided' }],
     ])
   })
 })

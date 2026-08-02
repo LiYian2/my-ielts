@@ -67,16 +67,21 @@ export function recordReview(progress: WordProgress, outcome: ReviewOutcome, dat
   }
 
   const dateKey = localDateKey(date)
+  const isNewUnaidedRecall = !progress.unaidedRecallDates.includes(dateKey)
   const unaidedRecallDates = addDistinctDate(progress.unaidedRecallDates, dateKey)
-  const intervalIndex = progress.unaidedRecallDates.length === 0
-    ? 0
-    : Math.min(progress.intervalIndex + 1, REVIEW_INTERVAL_DAYS.length - 1)
+  const intervalIndex = !isNewUnaidedRecall
+    ? progress.intervalIndex
+    : progress.unaidedRecallDates.length === 0
+      ? 0
+      : Math.min(progress.intervalIndex + 1, REVIEW_INTERVAL_DAYS.length - 1)
 
   return {
     ...next,
     state: stateFromEvidence(progress.state, unaidedRecallDates, next.productionDates),
     intervalIndex,
-    nextReviewOn: addLocalCalendarDays(date, REVIEW_INTERVAL_DAYS[intervalIndex]),
+    nextReviewOn: isNewUnaidedRecall
+      ? addLocalCalendarDays(date, REVIEW_INTERVAL_DAYS[intervalIndex])
+      : progress.nextReviewOn,
     unaidedRecallDates,
     lastOutcome: outcome,
   }

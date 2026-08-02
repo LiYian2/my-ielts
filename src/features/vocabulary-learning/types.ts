@@ -110,9 +110,24 @@ export interface SavedAnswer {
   updatedAt: string
 }
 
+export interface RecallRecord {
+  entryId: EntryId
+  outcome: ReviewOutcome
+  completedOn: string
+}
+
+export type DelayedReviewMode = 'meaning' | 'cloze' | 'collocation' | 'production'
+
+export interface DelayedReviewItem {
+  entry: CanonicalEntry
+  card: WordCard
+  mode: DelayedReviewMode
+}
+
 export interface LearningStateV1 {
   schemaVersion: 1
   words: Record<EntryId, WordProgress>
   answers: Record<string, SavedAnswer>
   completedLessons: string[]
+  recalls?: Record<string, RecallRecord>
 }

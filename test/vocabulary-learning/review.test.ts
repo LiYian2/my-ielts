@@ -72,6 +72,16 @@ describe('vocabulary review scheduling', () => {
     })
   })
 
+  it('keeps review timing unchanged for a duplicate unaided recall on the same local date', () => {
+    const firstRecall = recordReview(createWordProgress(), 'unaided', new Date(2026, 7, 2, 10))
+
+    expect(recordReview(firstRecall, 'unaided', new Date(2026, 7, 2, 15))).toMatchObject({
+      intervalIndex: 0,
+      nextReviewOn: '2026-08-03',
+      unaidedRecallDates: ['2026-08-02'],
+    })
+  })
+
   it('makes a word active after unaided recalls on two dates and production', () => {
     const firstRecall = recordReview(createWordProgress(), 'unaided', new Date(2026, 7, 2, 10))
     const secondRecall = recordReview(firstRecall, 'unaided', new Date(2026, 7, 3, 10))

@@ -7,6 +7,7 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
+    DelayedReviewStage: typeof import('./src/components/vocabulary-learning/DelayedReviewStage.vue')['default']
     LessonReader: typeof import('./src/components/vocabulary-learning/LessonReader.vue')['default']
     ProductionStage: typeof import('./src/components/vocabulary-learning/ProductionStage.vue')['default']
     ProgressBackup: typeof import('./src/components/vocabulary-learning/ProgressBackup.vue')['default']

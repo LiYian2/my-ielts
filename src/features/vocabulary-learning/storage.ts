@@ -1,4 +1,4 @@
-import type { EntryId, LearningStateV1, MasteryState, ReviewOutcome, SavedAnswer, WordProgress } from './types'
+import type { EntryId, LearningStateV1, MasteryState, RecallRecord, ReviewOutcome, SavedAnswer, WordProgress } from './types'
 import { REVIEW_INTERVAL_DAYS } from './review'
 
 export const LEARNING_STORAGE_KEY = 'my-ielts:vocabulary-learning:v1'
@@ -110,6 +110,9 @@ function validateLearningState(value: unknown): LearningStateV1 {
       throw new Error('Invalid learning progress import')
     return [taskId, validateSavedAnswer(answer, taskId)]
   })) as Record<string, SavedAnswer>
+  const recalls = value.recalls === undefined
+    ? undefined
+    : validateRecallRecords(value.recalls, words)
 
   if (!value.completedLessons.every(isNonEmptyString) || new Set(value.completedLessons).size !== value.completedLessons.length)
     throw new Error('Invalid learning progress import')
@@ -119,7 +122,30 @@ function validateLearningState(value: unknown): LearningStateV1 {
     words,
     answers,
     completedLessons: [...value.completedLessons],
+    ...(recalls ? { recalls } : {}),
   }
+}
+
+function validateRecallRecords(value: unknown, words: Record<EntryId, WordProgress>): Record<string, RecallRecord> {
+  if (!isRecord(value))
+    throw new Error('Invalid learning progress import')
+
+  return Object.fromEntries(Object.entries(value).map(([exerciseId, record]) => {
+    if (!isNonEmptyString(exerciseId)
+      || !isRecord(record)
+      || !isNonEmptyString(record.entryId)
+      || !ENTRY_ID_PATTERN.test(record.entryId)
+      || !Object.hasOwn(words, record.entryId)
+      || !REVIEW_OUTCOMES.includes(record.outcome as ReviewOutcome)
+      || !isDateKey(record.completedOn))
+      throw new Error('Invalid learning progress import')
+
+    return [exerciseId, {
+      entryId: record.entryId as EntryId,
+      outcome: record.outcome as ReviewOutcome,
+      completedOn: record.completedOn,
+    }]
+  }))
 }
 
 function validateWordProgress(value: unknown): WordProgress {

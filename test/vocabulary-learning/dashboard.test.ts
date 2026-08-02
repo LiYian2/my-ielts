@@ -1,5 +1,5 @@
 import { flushPromises, mount } from '@vue/test-utils'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import TopicDashboard from '../../src/components/vocabulary-learning/TopicDashboard.vue'
 import ProgressBackup from '../../src/components/vocabulary-learning/ProgressBackup.vue'
 import { findTopicBySlug, topicManifest } from '../../src/features/vocabulary-learning/content/manifest'
@@ -86,6 +86,35 @@ describe('active vocabulary dashboard', () => {
       '今日待复习',
     ])
     expect(wrapper.findAll('dl dd').map(item => item.text().trim())).toEqual(['72', '1', '1', '1', '1'])
+  })
+
+  it('refreshes today due counts after local midnight and clears its refresh timer on unmount', async () => {
+    vi.useFakeTimers()
+    vi.setSystemTime(new Date(2026, 7, 3, 23, 59, 50))
+    const wrapper = mount(TopicDashboard, {
+      props: {
+        manifest,
+        progress: {
+          ...progress,
+          words: {
+            ...progress.words,
+            '04-space-exploration:cosmos': {
+              ...progress.words['04-space-exploration:cosmos']!,
+              nextReviewOn: '2026-08-04',
+            },
+          },
+        },
+      },
+      global: { components: { RouterLink: RouterLinkStub } },
+    })
+
+    expect(wrapper.findAll('dl dd').at(-1)?.text().trim()).toBe('0')
+    await vi.advanceTimersByTimeAsync(10_001)
+    expect(wrapper.findAll('dl dd').at(-1)?.text().trim()).toBe('1')
+
+    wrapper.unmount()
+    expect(vi.getTimerCount()).toBe(0)
+    vi.useRealTimers()
   })
 
   it('emits export, imported JSON, and confirmed reset requests without owning storage', async () => {

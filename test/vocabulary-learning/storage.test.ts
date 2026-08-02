@@ -74,6 +74,13 @@ function savedState() {
       },
     },
     completedLessons: ['lesson-1'],
+    recalls: {
+      'lesson-1-recall-orbit': {
+        entryId: '04-space-exploration:orbit' as const,
+        outcome: 'unaided' as const,
+        completedOn: '2026-08-03',
+      },
+    },
   }
 }
 
@@ -178,12 +185,27 @@ describe('vocabulary learning storage', () => {
     expect(storage.getItem(LEARNING_STORAGE_KEY)).toBe(existing)
   })
 
-  it('exports then imports words, answers, and completed lessons without loss', () => {
+  it('exports then imports words, answers, exact recalls, and completed lessons without loss', () => {
     const source = savedState()
     const storage = new MemoryStorage()
 
     expect(importLearningState(storage, exportLearningState(source))).toEqual(source)
     expect(loadLearningState(storage)).toEqual(source)
+  })
+
+  it('rejects malformed or orphaned exact recall records', () => {
+    const storage = new MemoryStorage()
+    const invalidStates = [
+      { ...savedState(), recalls: [] },
+      { ...savedState(), recalls: { '': savedState().recalls['lesson-1-recall-orbit'] } },
+      { ...savedState(), recalls: { bad: { ...savedState().recalls['lesson-1-recall-orbit'], entryId: 'not-an-entry' } } },
+      { ...savedState(), recalls: { bad: { ...savedState().recalls['lesson-1-recall-orbit'], entryId: '04-space-exploration:missing' } } },
+      { ...savedState(), recalls: { bad: { ...savedState().recalls['lesson-1-recall-orbit'], outcome: 'guessed' } } },
+      { ...savedState(), recalls: { bad: { ...savedState().recalls['lesson-1-recall-orbit'], completedOn: '2026-02-30' } } },
+    ]
+
+    for (const state of invalidStates)
+      expect(() => importLearningState(storage, JSON.stringify(state))).toThrow('Invalid learning progress import')
   })
 
   it('rejects semantically impossible review evidence and schedules', () => {
@@ -320,6 +342,31 @@ describe('useLearningProgress', () => {
     progress.resetProgress()
     expect(state.value).not.toBe(beforeReset)
     expect(state.value).toEqual({ schemaVersion: 1, words: {}, answers: {}, completedLessons: [] })
+  })
+
+  it('persists an exact recall exercise once together with its word review', () => {
+    const storage = new MemoryStorage()
+    const progress = useLearningProgress({ storage, now: () => new Date(2026, 7, 3, 12) })
+    const entryId = '04-space-exploration:orbit' as const
+
+    progress.recordRecallExercise('lesson-one-recall-1', entryId, 'unaided')
+    progress.recordRecallExercise('lesson-one-recall-1', entryId, 'failed')
+
+    expect(loadLearningState(storage)).toMatchObject({
+      recalls: {
+        'lesson-one-recall-1': {
+          entryId,
+          outcome: 'unaided',
+          completedOn: '2026-08-03',
+        },
+      },
+      words: {
+        [entryId]: {
+          lastOutcome: 'unaided',
+          unaidedRecallDates: ['2026-08-03'],
+        },
+      },
+    })
   })
 
   it('stays local when storage is unavailable or throws, preserving valid in-memory imports', () => {

@@ -33,6 +33,16 @@ const progressFacade = {
     const current = learningState.value.words[entryId] ?? wordProgress('understood')
     learningState.value = { ...learningState.value, words: { ...learningState.value.words, [entryId]: { ...current, lastOutcome: outcome } } }
   }),
+  recordRecallExercise: vi.fn((exerciseId: string, entryId: EntryId, outcome: 'unaided' | 'prompted' | 'failed') => {
+    if (learningState.value.recalls?.[exerciseId])
+      return
+    const current = learningState.value.words[entryId] ?? wordProgress('understood')
+    learningState.value = {
+      ...learningState.value,
+      words: { ...learningState.value.words, [entryId]: { ...current, lastOutcome: outcome } },
+      recalls: { ...learningState.value.recalls, [exerciseId]: { entryId, outcome, completedOn: '2026-08-03' } },
+    }
+  }),
   saveAnswer: vi.fn((answer: LearningStateV1['answers'][string]) => {
     learningState.value = { ...learningState.value, answers: { ...learningState.value.answers, [answer.taskId]: answer } }
   }),
@@ -45,14 +55,6 @@ function wordProgress(state: 'unseen' | 'understood' | 'recallable' | 'active' =
 
 vi.mock('vue-router', () => ({ useRoute: () => route }))
 vi.mock('../../src/features/vocabulary-learning/content/manifest', () => ({ findTopicBySlug: (slug: string) => topics.get(slug) }))
-vi.mock('../../src/features/vocabulary-learning/canonical', () => ({
-  getCanonicalTopic: () => ({
-    id: '04-space-exploration',
-    label: '04_太空探索',
-    chapterAudioPath: '',
-    entries: entryIds.map((id, index) => ({ id, primaryHeadword: ['orbit', 'galaxy', 'signal', 'probe'][index] })),
-  }),
-}))
 vi.mock('../../src/features/vocabulary-learning/useLearningProgress', () => ({ useLearningProgress: () => progressFacade }))
 vi.mock('../../src/components/vocabulary-learning/LessonReader.vue', () => ({
   // eslint-disable-next-line vue/one-component-per-file -- Route-level integration stub.
@@ -70,7 +72,7 @@ vi.mock('../../src/components/vocabulary-learning/RecallStage.vue', () => ({
     props: { exercises: { required: true, type: Array } },
     emits: ['reviewed'],
     setup(props, { emit }) {
-      return () => h('div', (props.exercises as Array<{ id: string; entryId: EntryId }>).map(exercise => h('button', { 'data-recall': exercise.id, 'onClick': () => emit('reviewed', { entryId: exercise.entryId, outcome: 'unaided' }) }, exercise.id)))
+      return () => h('div', (props.exercises as Array<{ id: string; entryId: EntryId }>).map(exercise => h('button', { 'data-recall': exercise.id, 'onClick': () => emit('reviewed', { exerciseId: exercise.id, entryId: exercise.entryId, outcome: 'unaided' }) }, exercise.id)))
     },
   }),
 }))
@@ -86,6 +88,16 @@ vi.mock('../../src/components/vocabulary-learning/ProductionStage.vue', () => ({
         h('button', { 'data-save': task.id, 'onClick': () => emit('answer-saved', answerFor(task)) }, `保存 ${task.id}`),
         h('button', { 'data-record': task.id, 'onClick': () => emit('production-recorded', { taskId: task.id, entryIds: task.requiredEntryIds }) }, `提交 ${task.id}`),
       ]))
+    },
+  }),
+}))
+vi.mock('../../src/components/vocabulary-learning/DelayedReviewStage.vue', () => ({
+  // eslint-disable-next-line vue/one-component-per-file -- Route-level integration stub.
+  default: defineComponent({
+    props: { items: { required: true, type: Array } },
+    emits: ['reviewed'],
+    setup(props, { emit }) {
+      return () => h('div', (props.items as Array<{ entry: { id: EntryId } }>).map(item => h('button', { 'data-delayed-review': item.entry.id, 'onClick': () => emit('reviewed', { entryId: item.entry.id, outcome: 'unaided' }) }, item.entry.id)))
     },
   }),
 }))
@@ -116,13 +128,23 @@ function lesson(id: string) {
 
 function content(title = '太空探索'): TopicContent {
   const first = lesson('lesson-one')
+  const wordCards = Object.fromEntries(entryIds.map(entryId => [entryId, {
+    entryId,
+    priority: 'standard' as const,
+    ipa: '/test/',
+    meaning: '测试含义',
+    collocations: ['test collocation', 'another collocation'] as [string, string],
+    example: { text: 'A test example.', use: 'both' as const },
+    passageSentence: 'A test passage sentence.',
+    outputPrompt: 'Use the target word.',
+  }])) as TopicContent['wordCards']
   return {
     schemaVersion: 1,
-    topicId: '04_太空探索',
+    topicId: '04-space-exploration',
     slug: 'space-exploration',
     title,
     level: 'B2-C1',
-    wordCards: {} as TopicContent['wordCards'],
+    wordCards,
     lessons: [first, lesson('lesson-two')],
     finalSpeaking: { ...tasks('final')[0]!, id: 'final-speaking', mode: 'speaking', prompt: 'IELTS Speaking challenge' },
     finalWriting: { ...tasks('final')[1]!, id: 'final-writing', mode: 'writing', prompt: 'IELTS Task 2 paragraph challenge' },
@@ -151,6 +173,7 @@ describe('active vocabulary topic page', () => {
     progressFacade.recordWordExposure.mockClear()
     progressFacade.recordWordProduction.mockClear()
     progressFacade.recordWordReview.mockClear()
+    progressFacade.recordRecallExercise.mockClear()
     progressFacade.saveAnswer.mockClear()
   })
 
@@ -164,11 +187,19 @@ describe('active vocabulary topic page', () => {
     await flushPromises()
 
     expect(wrapper.findAll('[data-stage]').map(item => item.text().trim())).toEqual(['预热', '语境输入', '主动回忆', '主动使用', '延迟复习'])
-    expect(wrapper.get('[data-stage="input"]').attributes('disabled')).toBeUndefined()
+    expect(wrapper.get('[data-stage="input"]').attributes('disabled')).toBeDefined()
     expect(wrapper.get('[data-stage="recall"]').attributes('disabled')).toBeDefined()
     expect(wrapper.get('[data-stage="production"]').attributes('disabled')).toBeDefined()
     expect(wrapper.get('[data-stage="review"]').attributes('disabled')).toBeDefined()
-    expect(wrapper.get('[data-stage-status]').text()).toContain('完成语境输入后解锁')
+    expect(wrapper.get('[data-stage-status]').text()).toContain('先写下预热回答')
+
+    await wrapper.get('[data-warmup-answer]').setValue('I know that an orbit is a path around a planet.')
+    await wrapper.get('[data-action="complete-warmup"]').trigger('click')
+    expect(progressFacade.saveAnswer).toHaveBeenCalledWith(expect.objectContaining({
+      taskId: 'warmup:lesson-one',
+      text: 'I know that an orbit is a path around a planet.',
+    }))
+    expect(wrapper.get('[data-stage="input"]').attributes('disabled')).toBeUndefined()
 
     await selectStage(wrapper, 'input')
     expect(progressFacade.recordWordExposure).not.toHaveBeenCalled()
@@ -183,7 +214,7 @@ describe('active vocabulary topic page', () => {
       await wrapper.get(`[data-recall="lesson-one-recall-${index}"]`).trigger('click')
     expect(wrapper.get('[data-stage="production"]').attributes('disabled')).toBeDefined()
     await wrapper.get('[data-recall="lesson-one-recall-4"]').trigger('click')
-    expect(progressFacade.recordWordReview).toHaveBeenCalledTimes(4)
+    expect(progressFacade.recordRecallExercise).toHaveBeenCalledTimes(4)
     expect(wrapper.get('[data-stage="production"]').attributes('disabled')).toBeUndefined()
 
     for (let index = 1; index <= 3; index += 1) {
@@ -198,6 +229,10 @@ describe('active vocabulary topic page', () => {
     expect(progressFacade.recordWordProduction).toHaveBeenCalledTimes(4)
     expect(progressFacade.completeLesson).toHaveBeenCalledWith('lesson-one')
     expect(wrapper.get('[data-stage="review"]').attributes('disabled')).toBeUndefined()
+
+    await wrapper.get('[data-action="next-lesson"]').trigger('click')
+    expect(wrapper.get('[data-stage="production"]').attributes('disabled')).toBeDefined()
+    await wrapper.get('[data-action="previous-lesson"]').trigger('click')
 
     await selectStage(wrapper, 'input')
     expect(wrapper.get('[data-action="complete-input"]').text()).toContain('完成语境输入')
@@ -223,6 +258,7 @@ describe('active vocabulary topic page', () => {
       },
       answers: persistedAnswers,
       completedLessons: [],
+      recalls: Object.fromEntries(entryIds.map((entryId, index) => [`lesson-one-recall-${index + 1}`, { entryId, outcome: 'unaided', completedOn: '2026-08-03' }])),
     }
     vi.setSystemTime(new Date(2026, 7, 3, 23, 59, 50))
     const wrapper = mountPage()
@@ -235,6 +271,9 @@ describe('active vocabulary topic page', () => {
     expect(wrapper.text()).toContain('完成所有课程后解锁')
     await vi.advanceTimersByTimeAsync(10_001)
     expect(wrapper.get('[data-topic-stats]').text()).toMatch(/今日待复习\s*1/)
+    await selectStage(wrapper, 'review')
+    await wrapper.get(`[data-delayed-review="${orbitId}"]`).trigger('click')
+    expect(progressFacade.recordWordReview).toHaveBeenCalledWith(orbitId, 'unaided')
 
     learningState.value = { ...learningState.value, completedLessons: ['lesson-one', 'lesson-two'] }
     await nextTick()
