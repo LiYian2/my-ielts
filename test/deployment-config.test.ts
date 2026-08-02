@@ -39,4 +39,9 @@ describe('Cloudflare Pages deployment', () => {
     expect(workflow).not.toContain('github-pages-deploy-action')
     expect(workflow).not.toContain('branch: gh-pages')
   })
+
+  it('publishes the fork and Cloudflare URLs', () => {
+    expect(read('README.md')).toContain('https://my-ielts.pages.dev')
+    expect(read('src/components/TheHeader.vue')).toContain('https://github.com/LiYian2/my-ielts')
+  })
 })
