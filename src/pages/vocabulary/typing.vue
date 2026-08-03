@@ -35,7 +35,6 @@ function reset() {
   wpm.value = 0
   accuracy.value = 100
   isFinished.value = false
-  playAudio()
 }
 
 let audio = null as HTMLAudioElement | null
@@ -49,7 +48,9 @@ function playAudio() {
   }
   audio = document.createElement('audio')
   audio.src = audioPath
-  audio.play()
+  audio.play().catch(() => {
+    // Browsers may reject playback until the learner interacts with the page.
+  })
 }
 
 // Normalize whitespace: replace non-breaking spaces and other unicode spaces with regular space
@@ -101,6 +102,11 @@ function nextWord() {
 
 onMounted(() => {
   reset()
+})
+
+onBeforeUnmount(() => {
+  audio?.pause()
+  audio = null
 })
 </script>
 
