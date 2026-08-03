@@ -32,7 +32,7 @@ function mountProduction(answers: Record<string, SavedAnswer> = {}) {
       tasks,
       answers,
       requiredWords: { [galaxyId]: 'galaxy', [launchId]: 'launch' },
-      now: () => new Date(2026, 7, 3, 9, 30),
+      now: () => new Date('2026-08-03T01:30:00.000Z'),
     },
   })
 }
